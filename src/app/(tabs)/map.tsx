@@ -8,7 +8,7 @@ import { View, StyleSheet, TouchableOpacity, ScrollView, Text } from 'react-nati
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { useQuery } from 'convex/react';
-import { api } from '@convex/_generated/api';
+import { api } from '../../../convex/_generated/api';
 import { MapView } from '@components/exposure/MapView';
 import { EXPOSURE_TYPES } from '@constants/exposureTypes';
 import { colors, spacing } from '@constants/theme';

@@ -9,7 +9,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { useUser, useAuth } from '@clerk/clerk-expo';
 import { useQuery, useMutation } from 'convex/react';
-import { api } from '@convex/_generated/api';
+import { api } from '../../../convex/_generated/api';
 import { colors, spacing } from '@constants/theme';
 import { APP_CONFIG } from '@constants/config';
 import { performanceMonitor } from '@utils/performance';

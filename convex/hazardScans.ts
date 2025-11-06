@@ -18,7 +18,16 @@ export const analyze = action({
     exposureId: v.id('exposures'),
     photoUrl: v.string(), // Public URL or base64 data URI
   },
-  handler: async (ctx, args) => {
+  handler: async (ctx, args): Promise<{
+    success: boolean;
+    scanId?: Id<'hazardScans'>;
+    detectedHazards?: any[];
+    suggestedExposureType?: string | null;
+    suggestedPPE?: string[];
+    overallAssessment?: string;
+    processingTime: number;
+    error?: string;
+  }> => {
     const startTime = Date.now();
 
     try {

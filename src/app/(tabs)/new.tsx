@@ -21,8 +21,8 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
-import { useConvexAction, useMutation, useQuery } from 'convex/react';
-import { api } from '@convex/_generated/api';
+import { useAction, useMutation, useQuery } from 'convex/react';
+import { api } from '../../../convex/_generated/api';
 import { useAuth } from '@clerk/clerk-expo';
 import { useExposures } from '@hooks/useExposures';
 import { useLocation } from '@hooks/useLocation';
@@ -63,7 +63,7 @@ export default function NewExposureScreen() {
   } = useVoice();
 
   // T100: AI Scan Integration
-  const analyzePhoto = useConvexAction(api.hazardScans.analyze);
+  const analyzePhoto = useAction(api.hazardScans.analyze);
   const updateAcceptance = useMutation(api.hazardScans.updateAcceptance);
 
   // T110-T111: Location suggestion and save site
