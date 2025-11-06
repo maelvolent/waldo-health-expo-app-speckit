@@ -1,0 +1,1103 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HazardScanResult Confidence Color Coding should use different colors for different confidence levels 1`] = `
+<View
+  accessible={false}
+  style={
+    [
+      {
+        "backgroundColor": "#F5F5F5",
+        "borderRadius": 8,
+        "padding": 16,
+        "shadowColor": "#212121",
+        "shadowOffset": {
+          "height": 2,
+          "width": 0,
+        },
+        "shadowOpacity": 0.1,
+        "shadowRadius": 4,
+      },
+      {
+        "elevation": 2,
+      },
+      {
+        "padding": 16,
+      },
+    ]
+  }
+>
+  <View
+    style={
+      {
+        "alignItems": "center",
+        "flexDirection": "row",
+        "gap": 8,
+        "marginBottom": 16,
+      }
+    }
+  >
+    <View
+      style={
+        {
+          "alignItems": "center",
+          "backgroundColor": undefined,
+          "borderRadius": 20,
+          "height": 40,
+          "justifyContent": "center",
+          "width": 40,
+        }
+      }
+    >
+      <Text
+        style={
+          [
+            {
+              "textAlign": "left",
+            },
+            {
+              "color": "rgba(28, 27, 31, 1)",
+              "fontFamily": "System",
+              "fontWeight": "400",
+              "letterSpacing": 0,
+            },
+            {
+              "writingDirection": "ltr",
+            },
+            {
+              "fontSize": 20,
+            },
+          ]
+        }
+      >
+        🤖
+      </Text>
+    </View>
+    <View
+      style={
+        {
+          "flex": 1,
+        }
+      }
+    >
+      <Text
+        style={
+          [
+            {
+              "textAlign": "left",
+            },
+            {
+              "color": "rgba(28, 27, 31, 1)",
+              "writingDirection": "ltr",
+            },
+            [
+              {
+                "fontFamily": "System",
+                "fontSize": 16,
+                "fontWeight": "500",
+                "letterSpacing": 0.15,
+                "lineHeight": 24,
+              },
+              {
+                "color": "#212121",
+                "fontWeight": "600",
+              },
+            ],
+          ]
+        }
+      >
+        AI Hazard Detection
+      </Text>
+    </View>
+    <View
+      collapsable={false}
+      style={
+        {
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderRadius": 8,
+          "shadowColor": "#000",
+          "shadowOffset": {
+            "height": 0,
+            "width": 0,
+          },
+          "shadowOpacity": 0,
+          "shadowRadius": 0,
+        }
+      }
+      testID="chip-container-outer-layer"
+    >
+      <View
+        collapsable={false}
+        style={
+          {
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "borderColor": "#388E3C",
+            "borderRadius": 8,
+            "borderStyle": "solid",
+            "borderWidth": 1,
+            "flex": undefined,
+            "flexDirection": "column",
+            "shadowColor": "#000",
+            "shadowOffset": {
+              "height": 0,
+              "width": 0,
+            },
+            "shadowOpacity": 0,
+            "shadowRadius": 0,
+          }
+        }
+        testID="chip-container"
+      >
+        <View
+          accessibilityRole="button"
+          accessibilityState={
+            {
+              "busy": undefined,
+              "checked": undefined,
+              "disabled": true,
+              "expanded": undefined,
+              "selected": false,
+            }
+          }
+          accessibilityValue={
+            {
+              "max": undefined,
+              "min": undefined,
+              "now": undefined,
+              "text": undefined,
+            }
+          }
+          accessible={true}
+          collapsable={false}
+          focusable={true}
+          onBlur={[Function]}
+          onClick={[Function]}
+          onFocus={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            [
+              {
+                "overflow": "hidden",
+              },
+              [
+                {
+                  "borderRadius": 8,
+                },
+                {
+                  "width": "100%",
+                },
+              ],
+            ]
+          }
+          testID="chip"
+        >
+          <View
+            style={
+              [
+                {
+                  "alignItems": "center",
+                  "flexDirection": "row",
+                  "paddingLeft": 4,
+                  "position": "relative",
+                },
+                {
+                  "paddingLeft": 0,
+                },
+                {
+                  "paddingRight": 0,
+                },
+              ]
+            }
+          >
+            <Text
+              numberOfLines={1}
+              selectable={false}
+              style={
+                [
+                  {
+                    "textAlign": "left",
+                  },
+                  {
+                    "color": "rgba(28, 27, 31, 1)",
+                    "writingDirection": "ltr",
+                  },
+                  [
+                    {
+                      "fontFamily": "System",
+                      "fontSize": 14,
+                      "fontWeight": "500",
+                      "letterSpacing": 0.1,
+                      "lineHeight": 20,
+                    },
+                    [
+                      {
+                        "marginVertical": 6,
+                        "textAlignVertical": "center",
+                      },
+                      {
+                        "color": "rgba(29, 25, 43, 1)",
+                        "fontFamily": "System",
+                        "fontSize": 14,
+                        "fontWeight": "500",
+                        "letterSpacing": 0.1,
+                        "lineHeight": 20,
+                      },
+                      {
+                        "marginLeft": 16,
+                        "marginRight": 16,
+                      },
+                      {
+                        "color": undefined,
+                        "fontSize": 11,
+                      },
+                    ],
+                  ],
+                ]
+              }
+            >
+              High Confidence
+            </Text>
+          </View>
+        </View>
+      </View>
+    </View>
+  </View>
+  <View
+    style={
+      {
+        "marginBottom": 16,
+      }
+    }
+  >
+    <Text
+      style={
+        [
+          {
+            "textAlign": "left",
+          },
+          {
+            "color": "rgba(28, 27, 31, 1)",
+            "writingDirection": "ltr",
+          },
+          [
+            {
+              "fontFamily": "System",
+              "fontSize": 14,
+              "fontWeight": "500",
+              "letterSpacing": 0.1,
+              "lineHeight": 20,
+            },
+            {
+              "color": "#757575",
+              "fontWeight": "600",
+              "marginBottom": 8,
+            },
+          ],
+        ]
+      }
+    >
+      Detected Hazards (
+      3
+      )
+    </Text>
+    <View
+      style={
+        {
+          "marginBottom": 16,
+        }
+      }
+    >
+      <View
+        style={
+          {
+            "alignItems": "flex-start",
+            "flexDirection": "row",
+            "gap": 8,
+            "justifyContent": "space-between",
+            "marginBottom": 4,
+          }
+        }
+      >
+        <Text
+          style={
+            [
+              {
+                "textAlign": "left",
+              },
+              {
+                "color": "rgba(28, 27, 31, 1)",
+                "writingDirection": "ltr",
+              },
+              [
+                {
+                  "fontFamily": "System",
+                  "fontSize": 14,
+                  "fontWeight": "400",
+                  "letterSpacing": 0.25,
+                  "lineHeight": 20,
+                },
+                {
+                  "color": "#212121",
+                  "flex": 1,
+                },
+              ],
+            ]
+          }
+        >
+          High confidence detection
+        </Text>
+        <View
+          collapsable={false}
+          style={
+            {
+              "backgroundColor": "rgba(255, 251, 254, 1)",
+              "borderRadius": 8,
+              "height": 24,
+              "shadowColor": "#000",
+              "shadowOffset": {
+                "height": 0,
+                "width": 0,
+              },
+              "shadowOpacity": 0,
+              "shadowRadius": 0,
+            }
+          }
+          testID="chip-container-outer-layer"
+        >
+          <View
+            collapsable={false}
+            style={
+              {
+                "backgroundColor": "rgba(255, 251, 254, 1)",
+                "borderColor": "#388E3C",
+                "borderRadius": 8,
+                "borderStyle": "solid",
+                "borderWidth": 1,
+                "flex": 1,
+                "flexDirection": "column",
+                "shadowColor": "#000",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 0,
+                "shadowRadius": 0,
+              }
+            }
+            testID="chip-container"
+          >
+            <View
+              accessibilityRole="button"
+              accessibilityState={
+                {
+                  "busy": undefined,
+                  "checked": undefined,
+                  "disabled": true,
+                  "expanded": undefined,
+                  "selected": false,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
+                }
+              }
+              accessible={true}
+              collapsable={false}
+              focusable={true}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              style={
+                [
+                  {
+                    "overflow": "hidden",
+                  },
+                  [
+                    {
+                      "borderRadius": 8,
+                    },
+                    {
+                      "width": "100%",
+                    },
+                  ],
+                ]
+              }
+              testID="chip"
+            >
+              <View
+                style={
+                  [
+                    {
+                      "alignItems": "center",
+                      "flexDirection": "row",
+                      "paddingLeft": 4,
+                      "position": "relative",
+                    },
+                    {
+                      "paddingLeft": 0,
+                    },
+                    {
+                      "paddingRight": 0,
+                    },
+                  ]
+                }
+              >
+                <Text
+                  numberOfLines={1}
+                  selectable={false}
+                  style={
+                    [
+                      {
+                        "textAlign": "left",
+                      },
+                      {
+                        "color": "rgba(28, 27, 31, 1)",
+                        "writingDirection": "ltr",
+                      },
+                      [
+                        {
+                          "fontFamily": "System",
+                          "fontSize": 14,
+                          "fontWeight": "500",
+                          "letterSpacing": 0.1,
+                          "lineHeight": 20,
+                        },
+                        [
+                          {
+                            "marginVertical": 6,
+                            "textAlignVertical": "center",
+                          },
+                          {
+                            "color": "rgba(73, 69, 79, 1)",
+                            "fontFamily": "System",
+                            "fontSize": 14,
+                            "fontWeight": "500",
+                            "letterSpacing": 0.1,
+                            "lineHeight": 20,
+                          },
+                          {
+                            "marginLeft": 12,
+                            "marginRight": 12,
+                          },
+                          {
+                            "color": "#388E3C",
+                            "fontSize": 11,
+                          },
+                        ],
+                      ],
+                    ]
+                  }
+                >
+                  90
+                  % confident
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View>
+      </View>
+      <View
+        accessibilityRole="progressbar"
+        accessibilityState={
+          {
+            "busy": true,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": 100,
+            "min": 0,
+            "now": 90,
+          }
+        }
+        accessible={true}
+        onLayout={[Function]}
+        style={false}
+        testID="progress-bar"
+      >
+        <View
+          collapsable={false}
+          style={
+            {
+              "backgroundColor": "#E0E0E0",
+              "borderRadius": 2,
+              "height": 4,
+              "opacity": 0,
+              "overflow": "hidden",
+            }
+          }
+        />
+      </View>
+    </View>
+    <View
+      style={
+        {
+          "marginBottom": 16,
+        }
+      }
+    >
+      <View
+        style={
+          {
+            "alignItems": "flex-start",
+            "flexDirection": "row",
+            "gap": 8,
+            "justifyContent": "space-between",
+            "marginBottom": 4,
+          }
+        }
+      >
+        <Text
+          style={
+            [
+              {
+                "textAlign": "left",
+              },
+              {
+                "color": "rgba(28, 27, 31, 1)",
+                "writingDirection": "ltr",
+              },
+              [
+                {
+                  "fontFamily": "System",
+                  "fontSize": 14,
+                  "fontWeight": "400",
+                  "letterSpacing": 0.25,
+                  "lineHeight": 20,
+                },
+                {
+                  "color": "#212121",
+                  "flex": 1,
+                },
+              ],
+            ]
+          }
+        >
+          Medium confidence detection
+        </Text>
+        <View
+          collapsable={false}
+          style={
+            {
+              "backgroundColor": "rgba(255, 251, 254, 1)",
+              "borderRadius": 8,
+              "height": 24,
+              "shadowColor": "#000",
+              "shadowOffset": {
+                "height": 0,
+                "width": 0,
+              },
+              "shadowOpacity": 0,
+              "shadowRadius": 0,
+            }
+          }
+          testID="chip-container-outer-layer"
+        >
+          <View
+            collapsable={false}
+            style={
+              {
+                "backgroundColor": "rgba(255, 251, 254, 1)",
+                "borderColor": "#F57C00",
+                "borderRadius": 8,
+                "borderStyle": "solid",
+                "borderWidth": 1,
+                "flex": 1,
+                "flexDirection": "column",
+                "shadowColor": "#000",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 0,
+                "shadowRadius": 0,
+              }
+            }
+            testID="chip-container"
+          >
+            <View
+              accessibilityRole="button"
+              accessibilityState={
+                {
+                  "busy": undefined,
+                  "checked": undefined,
+                  "disabled": true,
+                  "expanded": undefined,
+                  "selected": false,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
+                }
+              }
+              accessible={true}
+              collapsable={false}
+              focusable={true}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              style={
+                [
+                  {
+                    "overflow": "hidden",
+                  },
+                  [
+                    {
+                      "borderRadius": 8,
+                    },
+                    {
+                      "width": "100%",
+                    },
+                  ],
+                ]
+              }
+              testID="chip"
+            >
+              <View
+                style={
+                  [
+                    {
+                      "alignItems": "center",
+                      "flexDirection": "row",
+                      "paddingLeft": 4,
+                      "position": "relative",
+                    },
+                    {
+                      "paddingLeft": 0,
+                    },
+                    {
+                      "paddingRight": 0,
+                    },
+                  ]
+                }
+              >
+                <Text
+                  numberOfLines={1}
+                  selectable={false}
+                  style={
+                    [
+                      {
+                        "textAlign": "left",
+                      },
+                      {
+                        "color": "rgba(28, 27, 31, 1)",
+                        "writingDirection": "ltr",
+                      },
+                      [
+                        {
+                          "fontFamily": "System",
+                          "fontSize": 14,
+                          "fontWeight": "500",
+                          "letterSpacing": 0.1,
+                          "lineHeight": 20,
+                        },
+                        [
+                          {
+                            "marginVertical": 6,
+                            "textAlignVertical": "center",
+                          },
+                          {
+                            "color": "rgba(73, 69, 79, 1)",
+                            "fontFamily": "System",
+                            "fontSize": 14,
+                            "fontWeight": "500",
+                            "letterSpacing": 0.1,
+                            "lineHeight": 20,
+                          },
+                          {
+                            "marginLeft": 12,
+                            "marginRight": 12,
+                          },
+                          {
+                            "color": "#F57C00",
+                            "fontSize": 11,
+                          },
+                        ],
+                      ],
+                    ]
+                  }
+                >
+                  70
+                  % confident
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View>
+      </View>
+      <View
+        accessibilityRole="progressbar"
+        accessibilityState={
+          {
+            "busy": true,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": 100,
+            "min": 0,
+            "now": 70,
+          }
+        }
+        accessible={true}
+        onLayout={[Function]}
+        style={false}
+        testID="progress-bar"
+      >
+        <View
+          collapsable={false}
+          style={
+            {
+              "backgroundColor": "#E0E0E0",
+              "borderRadius": 2,
+              "height": 4,
+              "opacity": 0,
+              "overflow": "hidden",
+            }
+          }
+        />
+      </View>
+    </View>
+    <View
+      style={
+        {
+          "marginBottom": 16,
+        }
+      }
+    >
+      <View
+        style={
+          {
+            "alignItems": "flex-start",
+            "flexDirection": "row",
+            "gap": 8,
+            "justifyContent": "space-between",
+            "marginBottom": 4,
+          }
+        }
+      >
+        <Text
+          style={
+            [
+              {
+                "textAlign": "left",
+              },
+              {
+                "color": "rgba(28, 27, 31, 1)",
+                "writingDirection": "ltr",
+              },
+              [
+                {
+                  "fontFamily": "System",
+                  "fontSize": 14,
+                  "fontWeight": "400",
+                  "letterSpacing": 0.25,
+                  "lineHeight": 20,
+                },
+                {
+                  "color": "#212121",
+                  "flex": 1,
+                },
+              ],
+            ]
+          }
+        >
+          Low confidence detection
+        </Text>
+        <View
+          collapsable={false}
+          style={
+            {
+              "backgroundColor": "rgba(255, 251, 254, 1)",
+              "borderRadius": 8,
+              "height": 24,
+              "shadowColor": "#000",
+              "shadowOffset": {
+                "height": 0,
+                "width": 0,
+              },
+              "shadowOpacity": 0,
+              "shadowRadius": 0,
+            }
+          }
+          testID="chip-container-outer-layer"
+        >
+          <View
+            collapsable={false}
+            style={
+              {
+                "backgroundColor": "rgba(255, 251, 254, 1)",
+                "borderColor": "#757575",
+                "borderRadius": 8,
+                "borderStyle": "solid",
+                "borderWidth": 1,
+                "flex": 1,
+                "flexDirection": "column",
+                "shadowColor": "#000",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 0,
+                "shadowRadius": 0,
+              }
+            }
+            testID="chip-container"
+          >
+            <View
+              accessibilityRole="button"
+              accessibilityState={
+                {
+                  "busy": undefined,
+                  "checked": undefined,
+                  "disabled": true,
+                  "expanded": undefined,
+                  "selected": false,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
+                }
+              }
+              accessible={true}
+              collapsable={false}
+              focusable={true}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              style={
+                [
+                  {
+                    "overflow": "hidden",
+                  },
+                  [
+                    {
+                      "borderRadius": 8,
+                    },
+                    {
+                      "width": "100%",
+                    },
+                  ],
+                ]
+              }
+              testID="chip"
+            >
+              <View
+                style={
+                  [
+                    {
+                      "alignItems": "center",
+                      "flexDirection": "row",
+                      "paddingLeft": 4,
+                      "position": "relative",
+                    },
+                    {
+                      "paddingLeft": 0,
+                    },
+                    {
+                      "paddingRight": 0,
+                    },
+                  ]
+                }
+              >
+                <Text
+                  numberOfLines={1}
+                  selectable={false}
+                  style={
+                    [
+                      {
+                        "textAlign": "left",
+                      },
+                      {
+                        "color": "rgba(28, 27, 31, 1)",
+                        "writingDirection": "ltr",
+                      },
+                      [
+                        {
+                          "fontFamily": "System",
+                          "fontSize": 14,
+                          "fontWeight": "500",
+                          "letterSpacing": 0.1,
+                          "lineHeight": 20,
+                        },
+                        [
+                          {
+                            "marginVertical": 6,
+                            "textAlignVertical": "center",
+                          },
+                          {
+                            "color": "rgba(73, 69, 79, 1)",
+                            "fontFamily": "System",
+                            "fontSize": 14,
+                            "fontWeight": "500",
+                            "letterSpacing": 0.1,
+                            "lineHeight": 20,
+                          },
+                          {
+                            "marginLeft": 12,
+                            "marginRight": 12,
+                          },
+                          {
+                            "color": "#757575",
+                            "fontSize": 11,
+                          },
+                        ],
+                      ],
+                    ]
+                  }
+                >
+                  55
+                  % confident
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View>
+      </View>
+      <View
+        accessibilityRole="progressbar"
+        accessibilityState={
+          {
+            "busy": true,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": 100,
+            "min": 0,
+            "now": 55,
+          }
+        }
+        accessible={true}
+        onLayout={[Function]}
+        style={false}
+        testID="progress-bar"
+      >
+        <View
+          collapsable={false}
+          style={
+            {
+              "backgroundColor": "#E0E0E0",
+              "borderRadius": 2,
+              "height": 4,
+              "opacity": 0,
+              "overflow": "hidden",
+            }
+          }
+        />
+      </View>
+    </View>
+  </View>
+  <View
+    style={
+      {
+        "backgroundColor": "#E0E0E0",
+        "borderRadius": 8,
+        "marginBottom": 16,
+        "padding": 8,
+      }
+    }
+  >
+    <Text
+      style={
+        [
+          {
+            "textAlign": "left",
+          },
+          {
+            "color": "rgba(28, 27, 31, 1)",
+            "writingDirection": "ltr",
+          },
+          [
+            {
+              "fontFamily": "System",
+              "fontSize": 12,
+              "fontWeight": "400",
+              "letterSpacing": 0.4,
+              "lineHeight": 16,
+            },
+            {
+              "color": "#212121",
+              "textAlign": "center",
+            },
+          ],
+        ]
+      }
+    >
+      ❌ Rejected by user
+    </Text>
+  </View>
+  <View
+    style={
+      {
+        "backgroundColor": undefined,
+        "borderRadius": 8,
+        "padding": 8,
+      }
+    }
+  >
+    <Text
+      style={
+        [
+          {
+            "textAlign": "left",
+          },
+          {
+            "color": "rgba(28, 27, 31, 1)",
+            "writingDirection": "ltr",
+          },
+          [
+            {
+              "fontFamily": "System",
+              "fontSize": 12,
+              "fontWeight": "400",
+              "letterSpacing": 0.4,
+              "lineHeight": 16,
+            },
+            {
+              "color": "#212121",
+              "lineHeight": 18,
+            },
+          ],
+        ]
+      }
+    >
+      ⚠️ AI detection is a suggested starting point. Always verify hazards yourself and follow your site's safety procedures.
+    </Text>
+  </View>
+</View>
+`;
