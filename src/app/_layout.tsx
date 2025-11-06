@@ -1,0 +1,97 @@
+/**
+ * Root Layout Component
+ * Configures providers for authentication, backend, and UI theming
+ *
+ * Provider hierarchy:
+ * 1. ClerkProvider - Authentication state
+ * 2. ConvexProviderWithClerk - Backend with auth integration
+ * 3. PaperProvider - UI components with WCAG AA theme
+ * 4. NetworkMonitor - T058: Auto-sync on connectivity
+ * 5. VoiceLanguageChecker - T082: Verify voice recognition language support
+ * 6. PerformanceMonitor - T116: Track app performance metrics
+ */
+
+import { useEffect } from 'react';
+import { Slot } from 'expo-router';
+import { ClerkProvider, useAuth } from '@clerk/clerk-expo';
+import { ConvexProviderWithClerk } from 'convex/react-clerk';
+import { ConvexReactClient } from 'convex/react';
+import { PaperProvider } from 'react-native-paper';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import * as SecureStore from 'expo-secure-store';
+import { useMutation } from 'convex/react';
+import { api } from '../../convex/_generated/api';
+import { NetworkMonitor } from '@components/common/NetworkMonitor';
+import { VoiceLanguageChecker } from '@components/common/VoiceLanguageChecker';
+import { performanceMonitor } from '@utils/performance';
+
+// Initialize Convex client
+const convex = new ConvexReactClient(process.env.EXPO_PUBLIC_CONVEX_URL!, {
+  unsavedChangesWarning: false,
+});
+
+// Secure token cache for Clerk
+const tokenCache = {
+  async getToken(key: string) {
+    try {
+      return await SecureStore.getItemAsync(key);
+    } catch (err) {
+      console.error('SecureStore getToken error:', err);
+      return null;
+    }
+  },
+  async saveToken(key: string, value: string) {
+    try {
+      await SecureStore.setItemAsync(key, value);
+    } catch (err) {
+      console.error('SecureStore saveToken error:', err);
+    }
+  },
+};
+
+/**
+ * User Initializer - Ensures user exists in Convex on auth
+ */
+function UserInitializer() {
+  const { isSignedIn } = useAuth();
+  const getOrCreateUser = useMutation(api.users.getOrCreate);
+
+  useEffect(() => {
+    if (isSignedIn) {
+      getOrCreateUser().catch(err => {
+        console.error('Failed to initialize user:', err);
+      });
+    }
+  }, [isSignedIn, getOrCreateUser]);
+
+  return null;
+}
+
+export default function RootLayout() {
+  // T116: Track app start time
+  useEffect(() => {
+    performanceMonitor.startMeasure('app_start_time');
+    // Mark app as interactive after first render
+    return () => {
+      performanceMonitor.endMeasure('app_start_time');
+    };
+  }, []);
+
+  return (
+    <ClerkProvider
+      publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!}
+      tokenCache={tokenCache}
+    >
+      <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
+        <SafeAreaProvider>
+          <PaperProvider>
+            <UserInitializer />
+            <NetworkMonitor />
+            <VoiceLanguageChecker />
+            <Slot />
+          </PaperProvider>
+        </SafeAreaProvider>
+      </ConvexProviderWithClerk>
+    </ClerkProvider>
+  );
+}

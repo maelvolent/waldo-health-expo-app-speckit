@@ -1,0 +1,59 @@
+{
+  "expo": {
+    "name": "Waldo Health",
+    "slug": "waldo-health",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "waldohealth",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#1976D2"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.waldohealth.app",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Waldo Health needs camera access to capture photos of workplace exposures for ACC documentation.",
+        "NSPhotoLibraryUsageDescription": "Waldo Health needs photo library access to attach existing photos to exposure records.",
+        "NSLocationWhenInUseUsageDescription": "Waldo Health needs your location to automatically record where exposures occurred.",
+        "NSMicrophoneUsageDescription": "Waldo Health needs microphone access for hands-free voice entry when documenting exposures.",
+        "NSSpeechRecognitionUsageDescription": "Waldo Health uses speech recognition to convert your voice descriptions into exposure records."
+      }
+    },
+    "android": {
+      "package": "com.waldohealth.app",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE"
+      ],
+      "edgeToEdgeEnabled": true,
+      "predictiveBackGestureEnabled": false
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow Waldo Health to access your camera to document workplace exposures."
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Allow Waldo Health to use your location to record where exposures occurred."
+        }
+      ],
+      [
+        "expo-av",
+        {
+          "microphonePermission": "Allow Waldo Health to use your microphone for voice entry."
+        }
+      ]
+    ]
+  }
+}

@@ -1,0 +1,464 @@
+# Tasks: Waldo Health - Mobile Exposure Documentation Platform
+
+**Input**: Design documents from `/specs/001-waldo-health/`
+**Prerequisites**: plan.md, spec.md, data-model.md, contracts/, research.md, quickstart.md
+
+**Tech Stack**: Expo SDK + React Native + TypeScript + Convex + Clerk + React Native Paper
+
+**Note**: Tests are included per constitution TDD requirement (80% minimum coverage, 95% for critical paths)
+
+---
+
+## Format: `[ID] [P?] [Story] Description`
+
+- **[P]**: Can run in parallel (different files, no dependencies)
+- **[Story]**: Which user story this task belongs to (US1, US2, US3, US4, US5)
+- Include exact file paths in descriptions
+
+---
+
+## Phase 1: Setup (Shared Infrastructure)
+
+**Purpose**: Project initialization and basic structure
+
+- [X] T001 Create Expo project with TypeScript template using `npx create-expo-app@latest --template blank-typescript`
+- [X] T002 Install core dependencies (convex, @clerk/clerk-expo, react-native-paper, react-native-mmkv) per quickstart.md
+- [X] T003 [P] Install Expo SDK modules (expo-camera, expo-location, expo-print, expo-image-manipulator, expo-file-system, expo-sharing, expo-av, react-native-maps)
+- [X] T004 [P] Install voice recognition (@react-native-voice/voice) and utilities (react-native-uuid, @react-native-community/netinfo, date-fns)
+- [X] T005 [P] Configure TypeScript with strict mode in tsconfig.json with path aliases (@/, @components/, @hooks/, @lib/, @constants/, @types/)
+- [X] T006 [P] Configure ESLint and Prettier per constitution standards in .eslintrc.js and .prettierrc
+- [X] T007 Create project directory structure (src/{app,components,convex,hooks,lib,constants,types}, __tests__/{unit,integration,contract}, assets/{images,fonts,exposure-icons})
+- [X] T008 [P] Configure app.json with permissions (camera, location, microphone, speech recognition) per quickstart.md
+- [X] T009 [P] Configure Jest for unit testing in jest.config.js with React Native Testing Library
+- [X] T010 [P] Configure Detox for E2E testing in .detoxrc.json for iOS and Android
+
+---
+
+## Phase 2: Foundational (Blocking Prerequisites)
+
+**Purpose**: Core infrastructure that MUST be complete before ANY user story can be implemented
+
+**⚠️ CRITICAL**: No user story work can begin until this phase is complete
+
+- [X] T011 Initialize Convex backend with `npx convex dev` and create convex/ directory
+- [X] T012 Create Convex schema in src/convex/schema.ts with User, ExposureRecord, Photo entities per data-model.md
+- [X] T013 Configure Clerk authentication - create account, note publishable key and secret key
+- [X] T014 Add Clerk environment variables to .env (EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY, CLERK_SECRET_KEY)
+- [X] T015 Configure Convex auth integration in src/convex/auth.config.ts with Clerk domain
+- [X] T016 Create root layout with providers in src/app/_layout.tsx (ClerkProvider, ConvexProviderWithClerk, PaperProvider)
+- [X] T017 Create theme configuration in src/constants/theme.ts with WCAG AA compliant colors (contrast 4.5:1 minimum)
+- [X] T018 [P] Create exposure types constants in src/constants/exposureTypes.ts with 12 categories and icons
+- [X] T019 [P] Create PPE types constants in src/constants/exposureTypes.ts with 8 PPE options
+- [X] T020 [P] Create TypeScript type definitions in src/types/exposure.ts for ExposureRecord
+- [X] T021 [P] Create TypeScript type definitions in src/types/photo.ts for Photo
+- [X] T022 [P] Create TypeScript type definitions in src/types/user.ts for User
+- [X] T023 Initialize MMKV storage for offline queue in src/lib/storage.ts
+- [X] T024 Create offline queue manager in src/lib/offlineQueue.ts with QueuedMutation interface per research.md
+- [X] T025 Create photo upload queue manager in src/lib/photoQueue.ts with retry logic (max 5 attempts) per research.md
+- [X] T026 [P] Create validation utilities in src/lib/validation.ts for exposure form fields (exposure type enum, severity enum, duration 0-24 hours, GPS coordinates -90/90 and -180/180)
+- [X] T027 [P] Setup Sentry for error tracking and performance monitoring (add SENTRY_DSN to .env)
+
+**Checkpoint**: Foundation ready - user story implementation can now begin in parallel
+
+---
+
+## Phase 3: User Story 1 - Quick Exposure Documentation (Priority: P1) 🎯 MVP
+
+**Goal**: Enable construction workers to document workplace exposures in under 60 seconds with photos, GPS location, timestamp, and exposure type selection
+
+**Independent Test**: Create exposure record with 1-5 photos, automatic GPS capture, select exposure type from 12 categories, save locally and sync when online, verify record appears in history with all metadata intact
+
+### Tests for User Story 1 ⚠️
+
+> **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
+
+- [X] T028 [P] [US1] Contract test for exposures:create mutation in __tests__/contract/exposures.test.ts verifying schema validation
+- [X] T029 [P] [US1] Contract test for photos:generateUploadUrl mutation in __tests__/contract/photos.test.ts
+- [X] T030 [P] [US1] Integration test for exposure creation flow in __tests__/integration/exposure-creation.e2e.ts (camera → form → save → history)
+- [X] T031 [P] [US1] Integration test for offline creation and sync in __tests__/integration/offline-sync.e2e.ts
+
+### Backend Implementation for User Story 1
+
+- [X] T032 [P] [US1] Implement exposures:create mutation in src/convex/exposures.ts with validation per contracts/exposures.md
+- [X] T033 [P] [US1] Implement exposures:list query in src/convex/exposures.ts with pagination (limit 50, cursor-based)
+- [X] T034 [P] [US1] Implement exposures:get query in src/convex/exposures.ts for single exposure by ID
+- [X] T035 [P] [US1] Implement photos:generateUploadUrl mutation in src/convex/photos.ts with S3 presigned URL generation
+- [X] T036 [P] [US1] Implement photos:confirmUpload mutation in src/convex/photos.ts to save metadata after upload
+- [X] T037 [P] [US1] Implement users:create mutation in src/convex/users.ts for Clerk auth integration
+- [X] T038 [P] [US1] Implement users:get query in src/convex/users.ts by clerkId
+
+### Frontend Utilities & Hooks for User Story 1
+
+- [X] T039 [P] [US1] Create camera utility in src/lib/camera.ts for EXIF preservation using expo-image-manipulator
+- [X] T040 [P] [US1] Create location utility in src/lib/location.ts for GPS capture and reverse geocoding using expo-location
+- [X] T041 [P] [US1] Create useCamera hook in src/hooks/useCamera.ts with permission handling and photo capture logic
+- [X] T042 [P] [US1] Create useLocation hook in src/hooks/useLocation.ts with permission handling and GPS capture
+- [X] T043 [P] [US1] Create useExposures hook in src/hooks/useExposures.ts wrapping Convex queries and mutations
+- [X] T044 [P] [US1] Create useOfflineSync hook in src/hooks/useOfflineSync.ts to monitor sync status and trigger sync on connectivity
+
+### UI Components for User Story 1
+
+- [X] T045 [P] [US1] Create LoadingSpinner component in src/components/common/LoadingSpinner.tsx with React Native Paper ActivityIndicator
+- [X] T046 [P] [US1] Create Button component in src/components/common/Button.tsx with WCAG AA compliant styling (44x44 touch target)
+- [X] T047 [P] [US1] Create Card component in src/components/common/Card.tsx with accessible layout
+- [X] T048 [P] [US1] Create PhotoCapture component in src/components/exposure/PhotoCapture.tsx using useCamera hook with 1-5 photo support
+- [X] T049 [US1] Create ExposureTypeSelector component in src/components/exposure/ExposureTypeSelector.tsx with 12 exposure type buttons (depends on EXPOSURE_TYPES constant)
+- [X] T050 [US1] Create ExposureForm component in src/components/exposure/ExposureForm.tsx with all fields (exposure type, duration, severity, PPE, work activity, notes, chemical name, SDS reference, control measures)
+- [X] T051 [US1] Create ExposureCard component in src/components/exposure/ExposureCard.tsx for list item display with thumbnail, type, timestamp, location
+
+### Screens for User Story 1
+
+- [X] T052 [US1] Create new exposure screen in src/app/(tabs)/new.tsx with camera-first workflow (PhotoCapture → ExposureForm → Save)
+- [X] T053 [US1] Implement local save logic in new.tsx using offlineQueue.enqueue() and photoQueue.enqueue()
+- [X] T054 [US1] Create exposures list screen in src/app/(tabs)/index.tsx using useExposures hook with pull-to-refresh
+- [X] T055 [US1] Create exposure detail screen in src/app/exposure/[id].tsx displaying all fields and photos
+- [X] T056 [US1] Add navigation from ExposureCard to detail screen
+- [X] T057 [US1] Implement auto-save functionality (every 3 seconds) for draft exposures in new.tsx per edge case requirement
+
+### Sync & Performance for User Story 1
+
+- [X] T058 [US1] Implement network state monitoring in src/app/_layout.tsx using @react-native-community/netinfo to trigger sync
+- [X] T059 [US1] Test and optimize exposure entry workflow to complete in under 60 seconds (P1 performance requirement)
+- [X] T060 [US1] Add sync status indicator UI badge in tab bar showing pending uploads count
+
+**Checkpoint**: At this point, User Story 1 should be fully functional and testable independently - users can document exposures with photos, GPS, and all metadata, working offline with auto-sync
+
+---
+
+## Phase 4: User Story 2 - Professional Documentation Export for ACC Claims (Priority: P1) 🎯 MVP
+
+**Goal**: Enable workers to export exposure history as professional PDF or CSV documents suitable for ACC claim submission
+
+**Independent Test**: Create multiple exposure records (different types, dates, locations), generate PDF export with cover page and embedded photos, generate CSV export with all fields, share via email or cloud storage, verify professional formatting
+
+### Tests for User Story 2 ⚠️
+
+- [X] T061 [P] [US2] Contract test for exposures:export action in __tests__/contract/exposures.test.ts verifying PDF and CSV generation
+- [X] T062 [P] [US2] Integration test for PDF export flow in __tests__/integration/export.e2e.ts (select exposures → generate PDF → verify content)
+- [X] T063 [P] [US2] Unit test for PDF generation in __tests__/unit/lib/pdf.test.ts verifying HTML template and image embedding
+
+### Backend Implementation for User Story 2
+
+- [X] T064 [P] [US2] Implement exposures:export action in src/convex/exports.ts for PDF generation (server-side fallback if needed)
+- [X] T065 [P] [US2] Implement photos:getDownloadUrl query in src/convex/photos.ts for temporary download URLs (1-hour expiration)
+
+### Frontend Utilities for User Story 2
+
+- [X] T066 [P] [US2] Create PDF generation utility in src/lib/pdf.ts using expo-print with HTML template including cover page, table of contents, exposure entries with embedded photos (base64)
+- [X] T067 [P] [US2] Create CSV export utility in src/lib/csv.ts generating CSV string with all exposure fields per contracts/exposures.md
+- [X] T068 [P] [US2] Implement image-to-base64 conversion in src/lib/pdf.ts using expo-image-manipulator (resize to 800px width, 80% quality JPEG)
+
+### UI Components & Screens for User Story 2
+
+- [X] T069 [P] [US2] Create export options screen in src/app/(tabs)/history.tsx with date range picker, exposure type filter, format selector (PDF/CSV)
+- [X] T070 [US2] Implement PDF generation logic in history.tsx using src/lib/pdf.ts (show progress indicator for large exports)
+- [X] T071 [US2] Implement CSV generation logic in history.tsx using src/lib/csv.ts
+- [X] T072 [US2] Implement share functionality using expo-sharing for generated PDF/CSV files
+- [X] T073 [US2] Add memory optimization for large exports (chunk into 20 exposures per PDF if >50 total) per research.md
+- [X] T074 [US2] Test PDF generation offline (must work without internet per FR-029) and verify all images embedded correctly
+
+**Checkpoint**: At this point, User Stories 1 AND 2 should both work independently - users can document exposures AND export professional documentation for ACC claims
+
+---
+
+## Phase 5: User Story 2b - Voice Entry for Hands-Free Operation (Priority: P1 continued)
+
+**Goal**: Enable hands-free exposure documentation using voice input (part of P1 quick documentation workflow)
+
+**Independent Test**: Enable voice entry, speak exposure details while wearing work gloves, verify app populates form fields from speech-to-text, works offline with NZ English support
+
+### Tests for Voice Entry ⚠️
+
+- [X] T075 [P] [US1] Unit test for voice-to-text parsing in __tests__/unit/lib/voice.test.ts verifying keyword extraction (exposure types, duration, PPE)
+- [X] T076 [P] [US1] Integration test for voice entry workflow in __tests__/integration/voice-construction-terms.test.ts with speech simulation
+
+### Implementation for Voice Entry
+
+- [X] T077 [P] [US1] Create voice utility in src/lib/voice.ts with @react-native-voice/voice initialization and NZ English locale (en-NZ with fallback to en-AU)
+- [X] T078 [P] [US1] Implement speech-to-text parsing function in src/lib/voice.ts to extract exposure type, duration, PPE from transcript
+- [X] T079 [P] [US1] Create useVoice hook in src/hooks/useVoice.ts with start/stop recording, transcript handling, and error recovery
+- [X] T080 [US1] Add voice entry button to new.tsx screen with microphone icon
+- [X] T081 [US1] Implement voice entry workflow in new.tsx - start recording → display transcript → parse and populate form fields
+- [X] T082 [US1] Add language pack check on app launch in src/app/_layout.tsx - prompt to download NZ English if missing
+- [X] T083 [US1] Test voice recognition with construction-specific terminology (silica, asbestos, PPE, respirator, etc.)
+
+**Checkpoint**: Voice entry feature complete - users can document exposures hands-free while wearing gloves or PPE
+
+---
+
+## Phase 6: User Story 3 - Education and Hazard Awareness (Priority: P2)
+
+**Goal**: Provide educational content about workplace hazards, proper PPE use, and safety best practices
+
+**Independent Test**: Browse educational content library by exposure type, search for specific hazards, read articles with embedded images/videos, access WorkSafe NZ links
+
+### Backend Implementation for User Story 3
+
+- [X] T084 [P] [US3] Add EducationalContentItem entity to Convex schema in src/convex/schema.ts per data-model.md
+- [X] T085 [P] [US3] Implement educationalContent:list query in src/convex/educationalContent.ts with filtering by exposure type and tags
+- [X] T086 [P] [US3] Implement educationalContent:get query in src/convex/educationalContent.ts for single article
+- [X] T087 [P] [US3] Implement educationalContent:incrementViewCount mutation in src/convex/educationalContent.ts
+- [X] T088 [US3] Seed initial educational content in Convex database - create 12 articles (1 per exposure type) with safety guidelines, PPE recommendations, health risks, WorkSafe NZ links
+
+### Frontend Implementation for User Story 3
+
+- [X] T089 [P] [US3] Create EducationCard component in src/components/education/EducationCard.tsx for content list item with thumbnail and excerpt
+- [X] T090 [P] [US3] Create education list screen in src/app/(tabs)/education.tsx with filtering by exposure type and search
+- [X] T091 [US3] Create education detail screen in src/app/education/[id].tsx displaying full article content with markdown rendering
+- [X] T092 [US3] Add contextual education links in ExposureForm component - "Learn more about [exposure type]" button
+- [X] T093 [US3] Test educational content accessibility with screen readers (VoiceOver/TalkBack)
+
+**Checkpoint**: Educational content feature complete and independently testable - users can learn about hazards and safety practices
+
+---
+
+## Phase 7: User Story 4 - AI-Powered Hazard Identification (Priority: P3)
+
+**Goal**: Use AI to analyze photos and detect potential workplace hazards with safety recommendations
+
+**Independent Test**: Take photo of construction scenario (concrete cutting, chemical containers, asbestos materials), run AI scan, verify hazard detection results with confidence levels and safety recommendations
+
+### Backend Implementation for User Story 4
+
+- [X] T094 [P] [US4] Add HazardScanResult entity to Convex schema in src/convex/schema.ts per data-model.md
+- [X] T095 [P] [US4] Implement hazardScans:analyze action in src/convex/hazardScans.ts using GPT-4 Vision API or similar AI model
+- [X] T096 [P] [US4] Implement hazardScans:getByPhoto query in src/convex/hazardScans.ts for retrieving scan results
+- [X] T097 [P] [US4] Add AI model configuration in src/constants/config.ts (API key, model version, confidence threshold)
+
+### Frontend Implementation for User Story 4
+
+- [X] T098 [P] [US4] Create HazardScanResult component in src/components/exposure/HazardScanResult.tsx displaying detected hazards with confidence levels
+- [X] T099 [P] [US4] Add "Scan for Hazards" button to PhotoCapture component in src/components/exposure/PhotoCapture.tsx
+- [X] T100 [US4] Implement AI scan workflow in new.tsx - upload photo → run analysis → display results → pre-populate form
+- [X] T101 [US4] Add disclaimer UI for asbestos detection - "Professional assessment required" warning with assessor directory link
+- [X] T102 [US4] Implement user feedback mechanism - accept/reject AI suggestions, track for model improvement
+- [X] T103 [US4] Test AI detection accuracy with sample construction photos (concrete cutting = silica, white fibrous material = potential asbestos, welding = welding fumes)
+
+**Checkpoint**: AI hazard detection feature complete - users get automated safety assistance and hazard identification
+
+---
+
+## Phase 8: User Story 5 - Location-Based Exposure Tracking and Patterns (Priority: P3)
+
+**Goal**: Visualize exposures on map, save frequent locations, identify high-risk sites
+
+**Independent Test**: Create exposures at different GPS locations, view on map with color-coded pins, filter by exposure type, save frequent sites, verify location suggestions work
+
+### Backend Implementation for User Story 5
+
+- [X] T104 [P] [US5] Add Location (Site) entity to Convex schema in src/convex/schema.ts per data-model.md
+- [X] T105 [P] [US5] Implement locations:list query in src/convex/locations.ts with sorting by lastUsedAt
+- [X] T106 [P] [US5] Implement locations:create mutation in src/convex/locations.ts for saving sites
+- [ ] T107 [P] [US5] Implement locations:suggestNearby query in src/convex/locations.ts finding sites within 50 meters of GPS coordinates
+
+### Frontend Implementation for User Story 5
+
+- [X] T108 [P] [US5] Create MapView component in src/components/exposure/MapView.tsx using react-native-maps with custom markers
+- [X] T109 [P] [US5] Create map screen in src/app/(tabs)/map.tsx with exposure pins and filtering UI
+- [X] T110 [US5] Implement location suggestion in ExposureForm - detect nearby saved sites and suggest site name
+- [X] T111 [US5] Add "Save this site" button in ExposureForm to create Location entity for reuse
+- [X] T112 [US5] Implement pin clustering for map performance with many exposures (>100 pins)
+- [X] T113 [US5] Add exposure type filtering to map view - toggle visibility by exposure type with color-coded legend
+- [X] T114 [US5] Implement lazy loading for MapView component to reduce initial bundle size per research.md
+
+**Checkpoint**: All user stories (US1-US5) should now be independently functional - complete feature set delivered
+
+---
+
+## Phase 9: Polish & Cross-Cutting Concerns
+
+**Purpose**: Improvements that affect multiple user stories
+
+- [X] T115 [P] Create user profile screen in src/app/(tabs)/profile.tsx with settings (enable voice entry, include maps in PDF, notifications)
+- [ ] T116 [P] Implement user preferences persistence in Convex users entity
+- [ ] T117 [P] Create authentication screens (sign up, login) using Clerk components
+- [ ] T118 [P] Add onboarding flow for first-time users explaining app features and permissions
+- [ ] T119 [P] Implement accessibility audit using Expo Accessibility Scanner and fix issues
+- [ ] T120 [P] Run expo-optimize on UI assets to reduce bundle size (exclude evidence photos)
+- [ ] T121 [P] Implement bundle size optimization with Expo Atlas - analyze and lazy load heavy features (Maps, PDF export)
+- [ ] T122 [P] Add performance monitoring with Sentry - track app launch time, exposure entry completion time, PDF generation time
+- [ ] T123 [P] Create app icons and splash screens in assets/images/ following Expo guidelines
+- [ ] T124 [P] Implement exposure icons for 12 exposure types in assets/exposure-icons/
+- [ ] T125 [P] Add crash reporting and error boundaries for graceful error handling
+- [ ] T126 [P] Implement data export for user privacy compliance (Right to Access) - allow users to download all their data
+- [ ] T127 [P] Add soft delete functionality for user account with 40-year retention warning
+- [ ] T128 [P] Create privacy policy screen accessible from profile settings
+- [ ] T129 [P] Implement rate limiting awareness - show friendly message if API rate limits hit
+- [ ] T130 Code cleanup and refactoring - remove console.logs, unused imports, commented code
+- [ ] T131 Run full accessibility test with VoiceOver (iOS) and TalkBack (Android) on all screens
+- [ ] T132 Run performance audit - verify < 60 second exposure entry, < 2 second app launch, < 50MB iOS bundle, < 35MB Android AAB
+- [ ] T133 [P] Write README.md with project overview, setup instructions, architecture diagram
+- [ ] T134 [P] Document API endpoints and Convex functions in separate API_DOCS.md
+- [ ] T135 Validate quickstart.md instructions by following setup steps from scratch
+
+---
+
+## Dependencies & Execution Order
+
+### Phase Dependencies
+
+- **Setup (Phase 1)**: No dependencies - can start immediately
+- **Foundational (Phase 2)**: Depends on Setup completion - BLOCKS all user stories
+- **User Stories (Phase 3-8)**: All depend on Foundational phase completion
+  - US1 (P1) → US2 (P1) → US2b (P1 voice) can proceed in order for MVP
+  - US3 (P2), US4 (P3), US5 (P3) can proceed in parallel after US1-US2 complete
+- **Polish (Phase 9)**: Depends on all desired user stories being complete
+
+### User Story Dependencies
+
+- **User Story 1 (P1)**: Can start after Foundational (Phase 2) - No dependencies on other stories - **MVP CRITICAL**
+- **User Story 2 (P1)**: Can start after US1 complete (needs exposure records to exist for export) - **MVP CRITICAL**
+- **User Story 2b (P1 Voice)**: Extension of US1, can proceed in parallel with US2 or after US2
+- **User Story 3 (P2)**: Can start after Foundational (Phase 2) - No dependencies on US1/US2, independently testable
+- **User Story 4 (P3)**: Depends on US1 (needs photos from exposures) - Start after US1 complete
+- **User Story 5 (P3)**: Depends on US1 (needs exposures with GPS data) - Start after US1 complete
+
+### Within Each User Story
+
+- Tests (if included) MUST be written and FAIL before implementation
+- Backend (Convex functions) can proceed in parallel with frontend utilities
+- UI components before screens (components used by screens)
+- Hooks before components (components use hooks)
+- Core implementation before integration
+- Story complete before moving to next priority
+
+### Parallel Opportunities
+
+**Setup Phase (T001-T010)**:
+- T003, T004, T005, T006, T008, T009, T010 can all run in parallel (different config files)
+
+**Foundational Phase (T011-T027)**:
+- T018, T019 can run in parallel (both constants files)
+- T020, T021, T022 can run in parallel (different type files)
+- T026, T027 can run in parallel (different utility files)
+
+**User Story 1 - Backend (T032-T038)**:
+- All 7 Convex function files can be written in parallel (exposures.ts, photos.ts, users.ts)
+
+**User Story 1 - Frontend Utilities (T039-T044)**:
+- All 6 utility/hook files can be written in parallel (different files, no dependencies)
+
+**User Story 1 - UI Components (T045-T051)**:
+- T045, T046, T047 (common components) can run in parallel
+- T048, T049, T051 can run in parallel after T045-T047 complete
+
+**User Story 2 (T066-T068)**:
+- All 3 utility files can be written in parallel
+
+**Parallel User Stories (After US1-US2 Complete)**:
+- US3, US4, US5 can all be worked on by different developers in parallel
+
+---
+
+## Parallel Example: User Story 1 Backend
+
+```bash
+# Launch all Convex function files together:
+# In parallel terminals or using Task tool:
+Task 1: "Implement exposures:create mutation in src/convex/exposures.ts"
+Task 2: "Implement exposures:list query in src/convex/exposures.ts"
+Task 3: "Implement exposures:get query in src/convex/exposures.ts"
+Task 4: "Implement photos:generateUploadUrl in src/convex/photos.ts"
+Task 5: "Implement photos:confirmUpload in src/convex/photos.ts"
+Task 6: "Implement users:create in src/convex/users.ts"
+Task 7: "Implement users:get in src/convex/users.ts"
+```
+
+---
+
+## Implementation Strategy
+
+### MVP First (User Stories 1, 2, 2b Only)
+
+1. Complete Phase 1: Setup (T001-T010)
+2. Complete Phase 2: Foundational (T011-T027) **← CRITICAL BLOCKER**
+3. Complete Phase 3: User Story 1 (T028-T060) **← MVP Core**
+4. Complete Phase 4: User Story 2 (T061-T074) **← MVP Export**
+5. Complete Phase 5: User Story 2b (T075-T083) **← MVP Voice**
+6. **STOP and VALIDATE**: Test MVP independently
+   - Create exposure with photos and GPS
+   - Verify offline functionality
+   - Export to PDF and verify formatting
+   - Test voice entry
+7. Deploy MVP to TestFlight/Play Store beta
+
+**Estimated MVP Timeline**: 6-8 weeks with 2 developers
+
+### Incremental Delivery
+
+1. Complete Setup + Foundational → Foundation ready (Week 1-2)
+2. Add User Story 1 → Test independently → Deploy (Week 3-4) **← Basic MVP**
+3. Add User Story 2 → Test independently → Deploy (Week 5) **← Full MVP**
+4. Add User Story 2b (Voice) → Test independently → Deploy (Week 6)
+5. Add User Story 3 (Education) → Test independently → Deploy (Week 7-8)
+6. Add User Story 4 (AI) → Test independently → Deploy (Week 9-10)
+7. Add User Story 5 (Maps) → Test independently → Deploy (Week 11-12)
+8. Polish & Cross-cutting → Final release (Week 13-14)
+
+**Full Feature Set Timeline**: 12-14 weeks with 2-3 developers
+
+### Parallel Team Strategy
+
+With multiple developers:
+
+1. **Week 1-2**: Team completes Setup + Foundational together
+2. **Week 3-6** (MVP Sprint):
+   - Developer A: User Story 1 (exposure documentation)
+   - Developer B: User Story 2 (PDF/CSV export)
+   - Developer C: Voice entry (US2b)
+3. **Week 7-12** (Feature Expansion):
+   - Developer A: User Story 3 (education)
+   - Developer B: User Story 4 (AI detection)
+   - Developer C: User Story 5 (maps)
+4. **Week 13-14**: All developers on Polish & Cross-cutting
+
+---
+
+## Notes
+
+- **[P] tasks** = different files, no dependencies - can run in parallel
+- **[Story] label** maps task to specific user story for traceability
+- Each user story should be independently completable and testable
+- Verify tests fail before implementing (TDD workflow)
+- Commit after each task or logical group
+- Stop at any checkpoint to validate story independently
+- Constitution requires 80% test coverage minimum (95% for critical paths: auth, data sync, exposure creation)
+- Accessibility testing required: VoiceOver/TalkBack on all screens, 4.5:1 color contrast, 44x44 touch targets
+- Performance testing required: < 60 second exposure entry (P1 requirement), < 2 second app launch
+- Offline functionality MUST be tested for all P1 features (create exposures, save photos, queue sync)
+
+---
+
+## Critical Success Criteria
+
+**MVP Success** (After completing US1, US2, US2b):
+- ✅ Users can document exposures in under 60 seconds
+- ✅ All data captured: photos (1-5), GPS, timestamp, exposure type, duration, severity, PPE
+- ✅ Offline functionality: works without internet, syncs when online
+- ✅ Voice entry: hands-free operation with NZ English support
+- ✅ Professional export: PDF with embedded photos suitable for ACC claims
+- ✅ CSV export: all fields exported for spreadsheet analysis
+- ✅ WCAG 2.1 AA compliant: screen readers, touch targets, color contrast
+- ✅ Bundle size: < 50MB iOS, < 35MB Android AAB
+- ✅ Test coverage: 80%+ overall, 95%+ critical paths
+
+**Feature Complete Success** (After all user stories):
+- ✅ All MVP criteria above
+- ✅ Educational content: 12 articles covering all exposure types
+- ✅ AI hazard detection: identifies common construction hazards with confidence levels
+- ✅ Location tracking: map view with pins, saved sites, location suggestions
+- ✅ Performance targets: app launch < 2s, PDF generation < 5s (10 exposures)
+
+---
+
+**Tasks Version**: 1.0
+**Generated**: 2025-11-06
+**Total Tasks**: 135
+**MVP Tasks**: T001-T083 (61% of total)
+**Parallel Opportunities**: 45 tasks marked [P] for parallel execution
+**User Stories Covered**: 5 (US1-US5)
+**Estimated Timeline**: 12-14 weeks full feature set, 6-8 weeks MVP
+
+**Ready for Implementation**: ✅ YES
+
+Run `/speckit.implement` to execute these tasks in dependency order!

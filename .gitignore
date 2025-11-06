@@ -1,0 +1,113 @@
+# Expo / React Native
+node_modules/
+.expo/
+.expo-shared/
+dist/
+npm-debug.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build/
+
+# macOS
+.DS_Store
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# TypeScript
+*.tsbuildinfo
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Testing
+coverage/
+*.lcov
+.nyc_output
+
+# Build artifacts
+build/
+dist/
+out/
+
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Misc
+.cache/
+Thumbs.db
+*.tmp
+
+# Android
+*.apk
+*.aab
+*.ap_
+*.dex
+*.class
+local.properties
+.gradle/
+build/
+captures/
+.cxx/
+*.iml
+.idea/
+
+# iOS
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata
+*.xccheckout
+*.moved-aside
+DerivedData
+*.hmap
+*.ipa
+*.xcuserstate
+ios/.xcode.env.local
+Pods/
+.xcode.env.local
+
+# Convex
+.convex/
+convex/_generated/
+
+# Temporary files
+*.swp
+*.swo
+*~
+.tmp/
+
+# EAS
+.easignore
+
+# Sentry
+.sentryclirc
+
+# Local configuration
+.npmrc.local

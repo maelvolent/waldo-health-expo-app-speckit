@@ -1,0 +1,7 @@
+{
+  "testEnvironment": "detox/runners/jest",
+  "testTimeout": 120000,
+  "testMatch": ["**/__tests__/integration/**/*.e2e.{ts,tsx}"],
+  "testPathIgnorePatterns": ["/node_modules/", "/android/", "/ios/"],
+  "verbose": true
+}
