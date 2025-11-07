@@ -22,7 +22,7 @@ import React, { useMemo, useCallback, useState } from 'react';
 import { View, StyleSheet, Image, Alert, Modal, Pressable } from 'react-native';
 import { Text, IconButton } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
-import { Card } from '@components/common/Card';
+import { GlassCard } from '@components/common/GlassCard';
 import { EXPOSURE_TYPES } from '@constants/exposureTypes';
 import { colors, spacing } from '@constants/theme';
 import { format } from 'date-fns';
@@ -94,7 +94,8 @@ export const ExposureCard = React.memo(function ExposureCard({
 
   return (
     <>
-      <Card
+      {/* T024: Glass card effect */}
+      <GlassCard
         onPress={onPress}
         onLongPress={handleLongPress} // T076: Long press to show menu
         accessibilityLabel={accessibilityLabel}
@@ -177,7 +178,7 @@ export const ExposureCard = React.memo(function ExposureCard({
           )}
         </View>
       </View>
-    </Card>
+    </GlassCard>
 
     {/* T076: Context menu modal */}
     <Modal
