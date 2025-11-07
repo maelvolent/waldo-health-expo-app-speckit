@@ -3,7 +3,7 @@ import { Link, useRouter } from 'expo-router';
 import { useAuth, useUser } from '@clerk/clerk-expo';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { colors, spacing } from '@constants/theme';
+import { colors, spacing, typography } from '@constants/theme';
 import { useQuery } from 'convex/react';
 import { api } from '../../../convex/_generated/api';
 import { SkeletonText } from '@components/common/SkeletonText';
@@ -190,8 +190,7 @@ const styles = StyleSheet.create({
     marginBottom: spacing.md,
   },
   title: {
-    fontSize: 32,
-    fontWeight: 'bold',
+    ...typography.h1,
     color: colors.text,
     textAlign: 'center',
     marginBottom: spacing.sm,
@@ -230,7 +229,7 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xl,
   },
   greeting: {
-    fontSize: 28,
+    ...typography.h2,
     fontWeight: 'bold',
     color: colors.text,
     marginBottom: spacing.sm,
@@ -262,8 +261,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
   },
+  // T061: Use theme tokens instead of hardcoded colors
   primaryCard: {
-    backgroundColor: '#e3f2fd',
+    backgroundColor: colors.primaryContainer,
     borderColor: colors.primary,
     borderWidth: 2,
   },
@@ -284,8 +284,9 @@ const styles = StyleSheet.create({
   },
 
   // Info Section
+  // T061: Use theme tokens
   infoSection: {
-    backgroundColor: '#f0f8ff',
+    backgroundColor: colors.infoBackground,
     borderRadius: 12,
     padding: spacing.lg,
     borderLeftWidth: 4,

@@ -641,7 +641,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: spacing.md,
     fontSize: 16,
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     justifyContent: 'center',
   },
   inputText: {
@@ -658,7 +658,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     maxHeight: '80%',
@@ -713,7 +713,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.textDisabled,
   },
   buttonText: {
-    color: '#fff',
+    color: colors.onPrimary,
     fontSize: 18,
     fontWeight: '600',
   },
@@ -731,7 +731,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: spacing.lg,
-    backgroundColor: '#f8f9fa',
+    backgroundColor: colors.surfaceVariant,
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
   },
@@ -749,7 +749,7 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   voiceButtonActive: {
-    backgroundColor: '#dc3545',
+    backgroundColor: colors.error,
   },
   voiceButtonIcon: {
     fontSize: 28,

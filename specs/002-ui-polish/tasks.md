@@ -175,17 +175,17 @@ Mobile React Native/Expo project structure:
 
 ### Implementation for User Story 6
 
-- [ ] T061 [P] [US6] Replace hardcoded colors with theme tokens in home screen src/app/(tabs)/index.tsx
-- [ ] T062 [P] [US6] Replace hardcoded colors with theme tokens in list screen src/app/(tabs)/list.tsx
-- [ ] T063 [P] [US6] Replace hardcoded colors with theme tokens in new exposure screen src/app/(tabs)/new.tsx
-- [ ] T064 [P] [US6] Replace hardcoded colors with theme tokens in export screen src/app/(tabs)/export.tsx
-- [ ] T065 [P] [US6] Replace hardcoded colors with theme tokens in education screen src/app/(tabs)/education.tsx
-- [ ] T066 [P] [US6] Replace hardcoded colors with theme tokens in profile screen src/app/(tabs)/profile.tsx
-- [ ] T067 [P] [US6] Replace hardcoded colors with theme tokens in ExposureCard src/components/exposure/ExposureCard.tsx
-- [ ] T068 [P] [US6] Replace hardcoded colors with theme tokens in Button component src/components/common/Button.tsx
-- [ ] T069 [P] [US6] Standardize H1/H2/H3 typography in home screen src/app/(tabs)/index.tsx
-- [ ] T070 [P] [US6] Standardize H1/H2/H3 typography in list screen src/app/(tabs)/list.tsx
-- [ ] T071 [P] [US6] Standardize H1/H2/H3 typography in exposure detail screen src/app/exposure/[id].tsx
+- [X] T061 [P] [US6] Replace hardcoded colors with theme tokens in home screen src/app/(tabs)/index.tsx
+- [X] T062 [P] [US6] Replace hardcoded colors with theme tokens in list screen src/app/(tabs)/list.tsx
+- [X] T063 [P] [US6] Replace hardcoded colors with theme tokens in new exposure screen src/app/(tabs)/new.tsx
+- [X] T064 [P] [US6] Replace hardcoded colors with theme tokens in export screen src/app/(tabs)/export.tsx
+- [X] T065 [P] [US6] Replace hardcoded colors with theme tokens in education screen src/app/(tabs)/education.tsx
+- [X] T066 [P] [US6] Replace hardcoded colors with theme tokens in profile screen src/app/(tabs)/profile.tsx
+- [X] T067 [P] [US6] Replace hardcoded colors with theme tokens in ExposureCard src/components/exposure/ExposureCard.tsx
+- [X] T068 [P] [US6] Replace hardcoded colors with theme tokens in Button component src/components/common/Button.tsx
+- [X] T069 [P] [US6] Standardize H1/H2/H3 typography in home screen src/app/(tabs)/index.tsx
+- [X] T070 [P] [US6] Standardize H1/H2/H3 typography in list screen src/app/(tabs)/list.tsx
+- [X] T071 [P] [US6] Standardize H1/H2/H3 typography in exposure detail screen src/app/exposure/[id].tsx
 
 **Checkpoint**: Visual consistency achieved - all colors from theme system, typography hierarchy standardized
 

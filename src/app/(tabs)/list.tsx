@@ -24,7 +24,7 @@ import { FilterBar } from '@components/exposure/FilterBar';
 import { ExposureCard } from '@components/exposure/ExposureCard';
 import { SkeletonList } from '@components/common/SkeletonList';
 import { EmptyState } from '@components/common/EmptyState';
-import { colors, spacing } from '@constants/theme';
+import { colors, spacing, typography } from '@constants/theme';
 
 export default function ExposuresListScreen() {
   const router = useRouter();
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
   },
   title: {
-    fontSize: 28,
+    ...typography.h2,
     fontWeight: 'bold',
     color: colors.text,
     marginBottom: spacing.xs,

@@ -498,24 +498,26 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     lineHeight: 20,
   },
+  // T064: Use theme tokens
   warningBox: {
     padding: spacing.md,
-    backgroundColor: '#fff3cd',
+    backgroundColor: colors.warningBackground,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#ffc107',
+    borderColor: colors.warningBorder,
     marginBottom: spacing.lg,
   },
   warningText: {
     fontSize: 14,
-    color: '#856404',
+    color: colors.text,
   },
+  // T064: Use theme tokens
   infoBox: {
     padding: spacing.md,
-    backgroundColor: '#e7f3ff',
+    backgroundColor: colors.infoBackground,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: colors.primary,
+    borderColor: colors.infoBorder,
     marginBottom: spacing.lg,
   },
   infoTitle: {
