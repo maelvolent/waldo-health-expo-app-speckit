@@ -27,8 +27,13 @@ import { useAuth } from '@clerk/clerk-expo';
 import { useExposures } from '@hooks/useExposures';
 import { useLocation } from '@hooks/useLocation';
 import { useVoice } from '@hooks/useVoice';
+import { useHaptics } from '@hooks/useHaptics';
+import { useDraftForm } from '@hooks/useDraftForm';
 import { PhotoCapture } from '@components/exposure/PhotoCapture';
 import { HazardScanResult } from '@components/exposure/HazardScanResult';
+import { FormProgress } from '@components/forms/FormProgress';
+import { InlineError } from '@components/forms/InlineError';
+import { DraftSaver } from '@components/forms/DraftSaver';
 import { colors, spacing } from '@constants/theme';
 import { isAIDetectionEnabled } from '@constants/config';
 
@@ -86,6 +91,28 @@ export default function NewExposureScreen() {
   const [showTypePicker, setShowTypePicker] = useState(false);
   const [pulseAnim] = useState(new Animated.Value(1));
 
+  // T042: Form progress tracking (4 steps)
+  const [currentStep, setCurrentStep] = useState(0);
+  const formSteps = [
+    { id: 'type', label: 'Type', description: 'Select exposure type' },
+    { id: 'details', label: 'Details', description: 'Describe the work' },
+    { id: 'location', label: 'Location', description: 'Add site info' },
+    { id: 'review', label: 'Review', description: 'Check and submit' },
+  ];
+
+  // T043: Validation errors
+  const [validationErrors, setValidationErrors] = useState<{
+    exposureType?: string;
+    workActivity?: string;
+  }>({});
+
+  // T047: Haptic feedback
+  const { light, success } = useHaptics();
+
+  // T044-T046: Draft management
+  const formData = { exposureType, workActivity, siteName, photoUris };
+  const { loadDraft, clearDraft, lastSaved } = useDraftForm('new-exposure', formData, 2000);
+
   // T100: Photo and AI scan state
   const [photoUris, setPhotoUris] = useState<string[]>([]);
   const [aiScanLoading, setAiScanLoading] = useState(false);
@@ -96,6 +123,20 @@ export default function NewExposureScreen() {
   // T110-T111: Location state
   const [siteName, setSiteName] = useState('');
   const [showSiteSuggestions, setShowSiteSuggestions] = useState(false);
+
+  // T045: Load draft on mount
+  useEffect(() => {
+    async function loadSavedDraft() {
+      const draft = await loadDraft();
+      if (draft) {
+        setExposureType(draft.exposureType || '');
+        setWorkActivity(draft.workActivity || '');
+        setSiteName(draft.siteName || '');
+        setPhotoUris(draft.photoUris || []);
+      }
+    }
+    loadSavedDraft();
+  }, []);
 
   // Auto-fill form fields from parsed voice data
   useEffect(() => {
@@ -129,14 +170,18 @@ export default function NewExposureScreen() {
     }
   }, [isListening, pulseAnim]);
 
+  // T047: Add haptic feedback to voice recording
   async function handleVoiceToggle() {
     if (!isVoiceAvailable) {
       Alert.alert('Voice Not Available', 'Voice recognition is not available on this device');
       return;
     }
 
+    light(); // Haptic feedback on tap
+
     if (isListening) {
       await stopListening();
+      success(); // Success haptic on stop
     } else {
       await startListening();
     }
@@ -257,10 +302,24 @@ export default function NewExposureScreen() {
   }
 
   async function handleSave() {
-    if (!exposureType || !workActivity) {
-      Alert.alert('Required', 'Please fill in exposure type and work activity');
+    // T043: Validation with inline errors
+    const errors: { exposureType?: string; workActivity?: string } = {};
+
+    if (!exposureType) {
+      errors.exposureType = 'Exposure type is required';
+    }
+    if (!workActivity || workActivity.trim().length === 0) {
+      errors.workActivity = 'Work activity description is required';
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
+      Alert.alert('Required Fields', 'Please fill in all required fields');
       return;
     }
+
+    // Clear validation errors
+    setValidationErrors({});
 
     try {
       setIsSaving(true);
@@ -295,6 +354,10 @@ export default function NewExposureScreen() {
         voiceTranscription: transcript || null,
       });
 
+      // T046: Clear draft on successful submission
+      await clearDraft();
+
+      success(); // Haptic feedback on success
       Alert.alert('Success', 'Exposure saved!', [{ text: 'OK', onPress: () => router.back() }]);
     } catch (error) {
       Alert.alert('Error', 'Failed to save exposure');
@@ -315,6 +378,12 @@ export default function NewExposureScreen() {
               : '❌ No location'}
         </Text>
       </View>
+
+      {/* T042: Form Progress Indicator */}
+      <FormProgress steps={formSteps} currentStep={currentStep} compact={true} />
+
+      {/* T044: Draft Auto-Save Indicator */}
+      <DraftSaver lastSaved={lastSaved} isSaving={false} compact={true} />
 
       {/* Voice Entry Button */}
       {isVoiceAvailable && (
@@ -392,6 +461,10 @@ export default function NewExposureScreen() {
                 : 'Select exposure type...'}
             </Text>
           </TouchableOpacity>
+          {/* T043: Inline validation error */}
+          {validationErrors.exposureType && (
+            <InlineError message={validationErrors.exposureType} errorId="exposureType-error" />
+          )}
         </View>
 
         <View style={styles.field}>
@@ -399,11 +472,25 @@ export default function NewExposureScreen() {
           <TextInput
             style={[styles.input, styles.textArea]}
             value={workActivity}
-            onChangeText={setWorkActivity}
+            onChangeText={(text) => {
+              setWorkActivity(text);
+              // Clear validation error when user starts typing
+              if (validationErrors.workActivity) {
+                setValidationErrors({ ...validationErrors, workActivity: undefined });
+              }
+            }}
             placeholder="Describe what you were doing..."
             multiline
             numberOfLines={4}
+            accessibilityLabel="Work activity"
+            accessibilityHint="Describe the work you were doing"
+            accessibilityInvalid={!!validationErrors.workActivity}
+            accessibilityErrorMessage={validationErrors.workActivity}
           />
+          {/* T043: Inline validation error */}
+          {validationErrors.workActivity && (
+            <InlineError message={validationErrors.workActivity} errorId="workActivity-error" />
+          )}
         </View>
 
         {/* T110-T111: Site Name Field */}
@@ -425,20 +512,33 @@ export default function NewExposureScreen() {
             placeholder="e.g., Building Site A, Office Level 3..."
           />
 
-          {/* T110: Site Suggestions */}
+          {/* T048: Site Suggestions as Cards */}
           {showSiteSuggestions && nearbySites && nearbySites.length > 0 && (
             <View style={styles.suggestions}>
               <Text style={styles.suggestionsTitle}>Nearby sites:</Text>
               {nearbySites.map((site, index) => (
                 <TouchableOpacity
                   key={index}
-                  style={styles.suggestionItem}
-                  onPress={() => applySiteSuggestion(site.siteName)}
+                  style={styles.suggestionCard}
+                  onPress={() => {
+                    light(); // Haptic feedback
+                    applySiteSuggestion(site.siteName);
+                  }}
+                  accessibilityRole="button"
+                  accessibilityLabel={`Select ${site.siteName}, ${Math.round(site.distance)} meters away`}
                 >
-                  <Text style={styles.suggestionName}>{site.siteName}</Text>
-                  <Text style={styles.suggestionDistance}>
-                    {Math.round(site.distance)}m away • Used {site.exposureCount} times
-                  </Text>
+                  <View style={styles.suggestionCardHeader}>
+                    <Text style={styles.suggestionCardIcon}>📍</Text>
+                    <Text style={styles.suggestionCardName}>{site.siteName}</Text>
+                  </View>
+                  <View style={styles.suggestionCardFooter}>
+                    <Text style={styles.suggestionCardDistance}>
+                      📏 {Math.round(site.distance)}m away
+                    </Text>
+                    <Text style={styles.suggestionCardUsage}>
+                      🔄 Used {site.exposureCount} {site.exposureCount === 1 ? 'time' : 'times'}
+                    </Text>
+                  </View>
                 </TouchableOpacity>
               ))}
             </View>
@@ -721,20 +821,46 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     marginBottom: spacing.xs,
   },
-  suggestionItem: {
-    paddingVertical: spacing.sm,
+  // T048: Card-style suggestion layout
+  suggestionCard: {
+    paddingVertical: spacing.md,
     paddingHorizontal: spacing.md,
     backgroundColor: colors.surface,
-    borderRadius: 6,
+    borderRadius: 12,
+    marginBottom: spacing.sm,
+    borderWidth: 1,
+    borderColor: colors.border,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  suggestionCardHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: spacing.xs,
   },
-  suggestionName: {
+  suggestionCardIcon: {
+    fontSize: 20,
+    marginRight: spacing.sm,
+  },
+  suggestionCardName: {
     fontSize: 15,
     fontWeight: '600',
     color: colors.text,
-    marginBottom: 2,
+    flex: 1,
   },
-  suggestionDistance: {
+  suggestionCardFooter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  suggestionCardDistance: {
+    fontSize: 12,
+    color: colors.textSecondary,
+  },
+  suggestionCardUsage: {
     fontSize: 12,
     color: colors.textSecondary,
   },

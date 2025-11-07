@@ -127,16 +127,16 @@ Mobile React Native/Expo project structure:
 
 ### Implementation for User Story 4
 
-- [ ] T039 [P] [US4] Create FormProgress component with step indicator in src/components/forms/FormProgress.tsx
-- [ ] T040 [P] [US4] Create InlineError component for field validation display in src/components/forms/InlineError.tsx
-- [ ] T041 [P] [US4] Create DraftSaver component with save indicator in src/components/forms/DraftSaver.tsx
-- [ ] T042 [US4] Add FormProgress to new exposure screen with 4 steps in src/app/(tabs)/new.tsx
-- [ ] T043 [US4] Add field-level validation with InlineError components in src/app/(tabs)/new.tsx
-- [ ] T044 [US4] Integrate DraftSaver component with form data in src/app/(tabs)/new.tsx
-- [ ] T045 [US4] Load draft on screen mount if exists in src/app/(tabs)/new.tsx
-- [ ] T046 [US4] Clear draft on successful form submission in src/app/(tabs)/new.tsx
-- [ ] T047 [US4] Add haptic feedback to voice recording button state changes in src/app/(tabs)/new.tsx
-- [ ] T048 [US4] Update site suggestions to display as cards with location details in src/app/(tabs)/new.tsx
+- [X] T039 [P] [US4] Create FormProgress component with step indicator in src/components/forms/FormProgress.tsx
+- [X] T040 [P] [US4] Create InlineError component for field validation display in src/components/forms/InlineError.tsx
+- [X] T041 [P] [US4] Create DraftSaver component with save indicator in src/components/forms/DraftSaver.tsx
+- [X] T042 [US4] Add FormProgress to new exposure screen with 4 steps in src/app/(tabs)/new.tsx
+- [X] T043 [US4] Add field-level validation with InlineError components in src/app/(tabs)/new.tsx
+- [X] T044 [US4] Integrate DraftSaver component with form data in src/app/(tabs)/new.tsx
+- [X] T045 [US4] Load draft on screen mount if exists in src/app/(tabs)/new.tsx
+- [X] T046 [US4] Clear draft on successful form submission in src/app/(tabs)/new.tsx
+- [X] T047 [US4] Add haptic feedback to voice recording button state changes in src/app/(tabs)/new.tsx
+- [X] T048 [US4] Update site suggestions to display as cards with location details in src/app/(tabs)/new.tsx
 
 **Checkpoint**: Form experience should be smooth - users receive inline validation, progress feedback, and drafts are preserved
 
