@@ -18,14 +18,15 @@
  * - Minimal re-renders
  */
 
-import React, { useMemo, useCallback } from 'react';
-import { View, StyleSheet, Image } from 'react-native';
+import React, { useMemo, useCallback, useState } from 'react';
+import { View, StyleSheet, Image, Alert, Modal, Pressable } from 'react-native';
 import { Text, IconButton } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import { Card } from '@components/common/Card';
 import { EXPOSURE_TYPES } from '@constants/exposureTypes';
 import { colors, spacing } from '@constants/theme';
 import { format } from 'date-fns';
+import { useHaptics } from '@hooks/useHaptics';
 
 interface ExposureCardProps {
   exposure: {
@@ -44,10 +45,27 @@ interface ExposureCardProps {
   };
   thumbnailUri?: string | null;
   onPress: () => void;
+  onEdit?: () => void; // T076: Optional edit handler
+  onDelete?: () => void; // T076: Optional delete handler
 }
 
 // T117: Wrap with React.memo for performance
-export const ExposureCard = React.memo(function ExposureCard({ exposure, thumbnailUri, onPress }: ExposureCardProps) {
+export const ExposureCard = React.memo(function ExposureCard({
+  exposure,
+  thumbnailUri,
+  onPress,
+  onEdit,
+  onDelete
+}: ExposureCardProps) {
+  const { medium } = useHaptics(); // T076: Haptic feedback for long press
+  const [showMenu, setShowMenu] = useState(false);
+
+  // T076: Handle long press to show context menu
+  const handleLongPress = useCallback(() => {
+    medium(); // Haptic feedback on long press
+    setShowMenu(true);
+  }, [medium]);
+
   // T117: Memoize expensive calculations
   const exposureType = useMemo(
     () => EXPOSURE_TYPES[exposure.exposureType.toUpperCase()],
@@ -75,12 +93,14 @@ export const ExposureCard = React.memo(function ExposureCard({ exposure, thumbna
   );
 
   return (
-    <Card
-      onPress={onPress}
-      accessibilityLabel={accessibilityLabel}
-      accessibilityHint="Tap to view details"
-    >
-      <View style={styles.container}>
+    <>
+      <Card
+        onPress={onPress}
+        onLongPress={handleLongPress} // T076: Long press to show menu
+        accessibilityLabel={accessibilityLabel}
+        accessibilityHint="Tap to view details, long press for options"
+      >
+        <View style={styles.container}>
         {/* Thumbnail or placeholder */}
         <View style={styles.thumbnailContainer}>
           {thumbnailUri ? (
@@ -158,6 +178,71 @@ export const ExposureCard = React.memo(function ExposureCard({ exposure, thumbna
         </View>
       </View>
     </Card>
+
+    {/* T076: Context menu modal */}
+    <Modal
+      visible={showMenu}
+      transparent={true}
+      animationType="fade"
+      onRequestClose={() => setShowMenu(false)}
+    >
+      <Pressable style={styles.modalOverlay} onPress={() => setShowMenu(false)}>
+        <View style={styles.contextMenu}>
+          <Pressable
+            style={styles.menuItem}
+            onPress={() => {
+              setShowMenu(false);
+              onPress();
+            }}
+            accessibilityRole="button"
+            accessibilityLabel="View details"
+          >
+            <Ionicons name="eye" size={20} color={colors.icon.primary} />
+            <Text style={styles.menuItemText}>View</Text>
+          </Pressable>
+
+          {onEdit && (
+            <Pressable
+              style={styles.menuItem}
+              onPress={() => {
+                setShowMenu(false);
+                onEdit();
+              }}
+              accessibilityRole="button"
+              accessibilityLabel="Edit exposure"
+            >
+              <Ionicons name="create" size={20} color={colors.icon.primary} />
+              <Text style={styles.menuItemText}>Edit</Text>
+            </Pressable>
+          )}
+
+          {onDelete && (
+            <Pressable
+              style={[styles.menuItem, styles.menuItemDanger]}
+              onPress={() => {
+                setShowMenu(false);
+                onDelete();
+              }}
+              accessibilityRole="button"
+              accessibilityLabel="Delete exposure"
+            >
+              <Ionicons name="trash" size={20} color={colors.error} />
+              <Text style={[styles.menuItemText, styles.menuItemTextDanger]}>Delete</Text>
+            </Pressable>
+          )}
+
+          <Pressable
+            style={[styles.menuItem, styles.menuItemCancel]}
+            onPress={() => setShowMenu(false)}
+            accessibilityRole="button"
+            accessibilityLabel="Cancel"
+          >
+            <Text style={styles.menuItemText}>Cancel</Text>
+          </Pressable>
+        </View>
+      </Pressable>
+    </Modal>
+  </>
   );
 }, (prevProps, nextProps) => {
   // T117: Custom comparison function for React.memo
@@ -272,5 +357,43 @@ const styles = StyleSheet.create({
   location: {
     flex: 1,
     color: colors.textSecondary,
+  },
+  // T076: Context menu styles
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: spacing.xl,
+  },
+  contextMenu: {
+    backgroundColor: colors.surface,
+    borderRadius: 12,
+    width: '100%',
+    maxWidth: 300,
+    overflow: 'hidden',
+  },
+  menuItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: spacing.lg,
+    gap: spacing.md,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+  },
+  menuItemDanger: {
+    backgroundColor: colors.errorBackground,
+  },
+  menuItemCancel: {
+    borderBottomWidth: 0,
+    justifyContent: 'center',
+  },
+  menuItemText: {
+    fontSize: 16,
+    color: colors.text,
+    fontWeight: '500',
+  },
+  menuItemTextDanger: {
+    color: colors.error,
   },
 });

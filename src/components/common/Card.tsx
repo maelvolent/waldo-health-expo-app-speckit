@@ -18,6 +18,7 @@ import { useHaptics } from '@hooks/useHaptics';
 interface CardProps {
   children: React.ReactNode;
   onPress?: () => void;
+  onLongPress?: () => void; // T076: Long press support
   style?: ViewStyle;
   elevation?: number;
   accessibilityLabel?: string;
@@ -27,6 +28,7 @@ interface CardProps {
 export function Card({
   children,
   onPress,
+  onLongPress,
   style,
   elevation = 2,
   accessibilityLabel,
@@ -44,11 +46,12 @@ export function Card({
 
   const cardStyle = [styles.card, { elevation }, style];
 
-  if (onPress) {
+  if (onPress || onLongPress) {
     return (
       <Pressable
         style={({ pressed }) => [cardStyle, pressed && styles.pressed]}
         onPress={handlePress}
+        onLongPress={onLongPress} // T076: Long press handler
         accessible={true}
         accessibilityLabel={accessibilityLabel}
         accessibilityHint={accessibilityHint}

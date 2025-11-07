@@ -32,6 +32,7 @@ import { generatePDF } from '@lib/pdf';
 import { generateCSV, generateCSVSummary } from '@lib/csv';
 import { colors, spacing } from '@constants/theme';
 import { format } from 'date-fns';
+import { useHaptics } from '@hooks/useHaptics';
 
 type ExportFormat = 'pdf' | 'csv' | 'csv-summary';
 
@@ -39,6 +40,7 @@ export default function ExportScreen() {
   const router = useRouter();
   const { user } = useUser();
   const convex = useConvex();
+  const { success, error: errorHaptic } = useHaptics(); // T074: Haptic feedback
   const [selectedFormat, setSelectedFormat] = useState<ExportFormat>('pdf');
   const [isExporting, setIsExporting] = useState(false);
   const [exportProgress, setExportProgress] = useState('');
@@ -192,6 +194,7 @@ export default function ExportScreen() {
 
       setExportProgress('Export complete!');
       setExportPercentage(100); // T038: 100% - Complete
+      success(); // T074: Haptic feedback on export completion
 
       // T072: Share functionality
       const canShare = await Sharing.isAvailableAsync();
@@ -213,6 +216,7 @@ export default function ExportScreen() {
       setExportPercentage(0); // T038: Reset
     } catch (error) {
       console.error('Export error:', error);
+      errorHaptic(); // T074: Haptic feedback on export error
       Alert.alert(
         'Export Failed',
         'An error occurred while generating the export. Please try again.'
@@ -264,12 +268,14 @@ export default function ExportScreen() {
         }
       }
 
+      success(); // T074: Haptic feedback on chunked export success
       Alert.alert('Success', `Generated ${chunks.length} PDF files`);
       setIsExporting(false);
       setExportProgress('');
       setExportPercentage(0); // T038: Reset
     } catch (error) {
       console.error('Chunked PDF error:', error);
+      errorHaptic(); // T074: Haptic feedback on chunked export error
       Alert.alert('Export Failed', 'An error occurred while generating chunked PDFs');
       setIsExporting(false);
       setExportProgress('');

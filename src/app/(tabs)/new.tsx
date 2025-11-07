@@ -106,8 +106,8 @@ export default function NewExposureScreen() {
     workActivity?: string;
   }>({});
 
-  // T047: Haptic feedback
-  const { light, success } = useHaptics();
+  // T047, T072, T073: Haptic feedback
+  const { light, success, error: errorHaptic } = useHaptics();
 
   // T044-T046: Draft management
   const formData = { exposureType, workActivity, siteName, photoUris };
@@ -314,6 +314,7 @@ export default function NewExposureScreen() {
 
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors);
+      errorHaptic(); // T073: Haptic feedback on validation error
       Alert.alert('Required Fields', 'Please fill in all required fields');
       return;
     }
@@ -357,9 +358,10 @@ export default function NewExposureScreen() {
       // T046: Clear draft on successful submission
       await clearDraft();
 
-      success(); // Haptic feedback on success
+      success(); // T072: Haptic feedback on success
       Alert.alert('Success', 'Exposure saved!', [{ text: 'OK', onPress: () => router.back() }]);
     } catch (error) {
+      errorHaptic(); // T073: Haptic feedback on save error
       Alert.alert('Error', 'Failed to save exposure');
     } finally {
       setIsSaving(false);

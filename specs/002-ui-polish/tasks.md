@@ -199,12 +199,12 @@ Mobile React Native/Expo project structure:
 
 ### Implementation for User Story 7
 
-- [ ] T072 [P] [US7] Add haptic feedback to form submission success in src/app/(tabs)/new.tsx
-- [ ] T073 [P] [US7] Add haptic feedback to form validation errors in src/app/(tabs)/new.tsx
-- [ ] T074 [P] [US7] Add haptic feedback to PDF export completion in src/app/(tabs)/export.tsx
-- [ ] T075 [P] [US7] Add haptic feedback to filter selection in FilterBar src/components/exposure/FilterBar.tsx
-- [ ] T076 [P] [US7] Add contextual long-press menu to ExposureCard with quick actions (view, edit, delete) in src/components/exposure/ExposureCard.tsx
-- [ ] T077 [US7] Ensure pull-to-refresh has haptic feedback on refresh trigger in src/app/(tabs)/list.tsx
+- [X] T072 [P] [US7] Add haptic feedback to form submission success in src/app/(tabs)/new.tsx
+- [X] T073 [P] [US7] Add haptic feedback to form validation errors in src/app/(tabs)/new.tsx
+- [X] T074 [P] [US7] Add haptic feedback to PDF export completion in src/app/(tabs)/export.tsx
+- [X] T075 [P] [US7] Add haptic feedback to filter selection in FilterBar src/components/exposure/FilterBar.tsx
+- [X] T076 [P] [US7] Add contextual long-press menu to ExposureCard with quick actions (view, edit, delete) in src/components/exposure/ExposureCard.tsx
+- [X] T077 [US7] Ensure pull-to-refresh has haptic feedback on refresh trigger in src/app/(tabs)/list.tsx
 
 **Checkpoint**: All mobile interaction enhancements complete - app feels native and responsive with comprehensive haptic feedback
 

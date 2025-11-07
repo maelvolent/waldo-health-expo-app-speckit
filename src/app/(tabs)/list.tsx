@@ -19,6 +19,7 @@ import { useExposures } from '@hooks/useExposures';
 import { useOfflineSync } from '@hooks/useOfflineSync';
 import { useSearch } from '@hooks/useSearch';
 import { useFilter } from '@hooks/useFilter';
+import { useHaptics } from '@hooks/useHaptics';
 import { SearchBar } from '@components/exposure/SearchBar';
 import { FilterBar } from '@components/exposure/FilterBar';
 import { ExposureCard } from '@components/exposure/ExposureCard';
@@ -31,6 +32,7 @@ export default function ExposuresListScreen() {
   const { exposures, isLoading, refresh } = useExposures();
   const { isOnline, exposureQueueCount, photoQueueCount } = useOfflineSync();
   const pendingCount = exposureQueueCount + photoQueueCount;
+  const { light } = useHaptics(); // T077: Haptic for pull-to-refresh
 
   // T020: Search integration
   const { query, setQuery, results: searchResults, isTyping } = useSearch(exposures || []);
@@ -43,6 +45,14 @@ export default function ExposuresListScreen() {
    */
   const handleCardPress = (exposureId: string) => {
     router.push(`/exposure/${exposureId}`);
+  };
+
+  /**
+   * T077: Handle pull-to-refresh with haptic feedback
+   */
+  const handleRefresh = () => {
+    light(); // Haptic feedback on pull-to-refresh
+    refresh();
   };
 
   const hasActiveFilters =
@@ -170,7 +180,7 @@ export default function ExposuresListScreen() {
         refreshControl={
           <RefreshControl
             refreshing={isLoading}
-            onRefresh={refresh}
+            onRefresh={handleRefresh} // T077: With haptic feedback
             colors={[colors.primary]}
             tintColor={colors.primary}
           />
