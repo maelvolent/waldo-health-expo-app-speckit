@@ -22,7 +22,7 @@ import { Text, TextInput, SegmentedButtons, Chip } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { useQuery } from 'convex/react';
 import { api } from '../../../convex/_generated/api';
-import { ExposureDraft } from '../../types/exposure';
+import { ExposureDraft } from '@types/exposure';
 import { PPE_TYPES, EXPOSURE_TYPES } from '@constants/exposureTypes';
 import { colors, spacing } from '@constants/theme';
 

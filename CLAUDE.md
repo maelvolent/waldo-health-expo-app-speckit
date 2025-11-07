@@ -327,9 +327,150 @@ See `IMPLEMENTATION_STATUS.md` and `PHASE_9_ROADMAP.md` for details:
 - Console.log only for warn/error
 - React hooks exhaustive deps as warning
 
+## UI Polish Patterns (002-ui-polish)
+
+### Custom Hooks Pattern
+All business logic extracted into reusable hooks:
+
+```typescript
+// Haptic feedback
+import { useHaptics } from '@hooks/useHaptics';
+const { light, medium, heavy, selection, success, warning, error } = useHaptics();
+light(); // On button tap
+success(); // On form submission
+error(); // On validation error
+
+// Form draft management
+import { useDraftForm } from '@hooks/useDraftForm';
+const { loadDraft, clearDraft, lastSaved } = useDraftForm('form-key', formData, 2000);
+
+// Debounced search
+import { useSearch } from '@hooks/useSearch';
+const { query, setQuery, results, isTyping } = useSearch(data, { delay: 300 });
+
+// Multi-criteria filtering
+import { useFilter } from '@hooks/useFilter';
+const { filters, setFilters, filtered } = useFilter(searchResults);
+```
+
+### Loading States Pattern
+Use skeleton components for professional loading states:
+
+```typescript
+import { SkeletonCard, SkeletonList, SkeletonText } from '@components/common';
+
+// While loading
+if (isLoading) return <SkeletonList count={6} />;
+
+// For statistics
+{isLoading ? <SkeletonText width="80%" size="small" /> : <Text>{count}</Text>}
+```
+
+### Empty States Pattern
+Context-aware empty state messaging:
+
+```typescript
+import { EmptyState } from '@components/common/EmptyState';
+
+// No data at all
+<EmptyState
+  icon="document-text-outline"
+  title="No exposures yet"
+  description="Tap Document Exposure to create your first record"
+  ctaLabel="Go to Home"
+  onCtaPress={() => router.push('/')}
+/>
+
+// No search/filter results
+<EmptyState
+  icon="search"
+  title="No exposures found"
+  description="Try different keywords or clear filters"
+  ctaLabel="Clear Filters"
+  onCtaPress={clearFilters}
+/>
+```
+
+### Form Experience Pattern
+Multi-step forms with progress, validation, and auto-save:
+
+```typescript
+import { FormProgress, InlineError, DraftSaver } from '@components/forms';
+
+const steps = [
+  { id: 'type', label: 'Type', description: 'Select type' },
+  { id: 'details', label: 'Details', description: 'Add details' },
+];
+
+<FormProgress steps={steps} currentStep={0} />
+<DraftSaver lastSaved={lastSaved} isSaving={false} />
+<InlineError message={validationErrors.field} errorId="field-error" />
+```
+
+### Accessibility Pattern
+All interactive elements need proper labels:
+
+```typescript
+<TouchableOpacity
+  accessibilityRole="button"
+  accessibilityLabel="Document new exposure"
+  accessibilityHint="Navigate to exposure form"
+  onPress={handlePress}
+>
+  {/* content */}
+</TouchableOpacity>
+```
+
+### Theme Usage Pattern
+Always use theme tokens, never hardcode:
+
+```typescript
+import { colors, spacing, typography, touchTarget } from '@constants/theme';
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: colors.surface,  // Not '#fff'
+    padding: spacing.md,              // Not 16
+  },
+  title: {
+    ...typography.h2,                 // Not fontSize: 24
+    color: colors.text,
+  },
+  button: {
+    minHeight: touchTarget.minHeight, // 48px minimum
+  },
+});
+```
+
+### Long-Press Menu Pattern
+Context menus on cards:
+
+```typescript
+import { Card } from '@components/common/Card';
+
+<Card
+  onPress={handleView}
+  onLongPress={handleLongPress}  // Shows context menu
+  accessibilityHint="Long press for options"
+>
+  {/* card content */}
+</Card>
+```
+
 ## Active Technologies
 - TypeScript 5.x with React Native via Expo SDK (latest stable) (002-ui-polish)
-- AsyncStorage (for draft form auto-save) (002-ui-polish)
+- expo-haptics for tactile feedback (002-ui-polish)
+- React Native Animated API for skeleton shimmer (002-ui-polish)
+- React.memo with custom comparison for performance (002-ui-polish)
 
 ## Recent Changes
-- 002-ui-polish: Added TypeScript 5.x with React Native via Expo SDK (latest stable)
+- 002-ui-polish: Completed Phases 1-9 (71/88 tasks)
+  - Created 18 new files (13 components + 5 hooks)
+  - Professional icon system with Ionicons
+  - Search and filter functionality
+  - Skeleton loading states
+  - Form progress and auto-save
+  - WCAG 2.1 AA accessibility
+  - Comprehensive haptic feedback
+  - Long-press context menus
+  - Zero hardcoded colors (all use theme tokens)

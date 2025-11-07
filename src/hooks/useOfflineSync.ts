@@ -11,8 +11,8 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import NetInfo from '@react-native-community/netinfo';
-import { offlineQueue } from '../lib/offlineQueue';
-import { photoQueue } from '../lib/photoQueue';
+import { offlineQueue } from '@lib/offlineQueue';
+import { photoQueue } from '@lib/photoQueue';
 
 interface UseOfflineSyncResult {
   // Network state

@@ -14,8 +14,8 @@ import { useState } from 'react';
 import { useQuery, useMutation } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { Id } from '../../convex/_generated/dataModel';
-import { ExposureDraft } from '../types/exposure';
-import { offlineQueue } from '../lib/offlineQueue';
+import { ExposureDraft } from '@types/exposure';
+import { offlineQueue } from '@lib/offlineQueue';
 import uuid from 'react-native-uuid';
 
 interface UseExposuresResult {

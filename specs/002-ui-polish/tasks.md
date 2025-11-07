@@ -222,9 +222,9 @@ Mobile React Native/Expo project structure:
 - [ ] T083 [P] Measure touch target sizes using React Native Debugger - verify all meet 44x44 minimum
 - [ ] T084 [P] Test with 50+ exposure records - verify search/filter performance
 - [ ] T085 [P] Test form abandonment and draft restoration flow end-to-end
-- [ ] T086 Code cleanup - remove any console.log statements not using warn/error
-- [ ] T087 Code cleanup - ensure all imports follow path aliases (@components, @hooks, etc.)
-- [ ] T088 Update CLAUDE.md with any new patterns or conventions from this feature
+- [X] T086 Code cleanup - remove any console.log statements not using warn/error
+- [X] T087 Code cleanup - ensure all imports follow path aliases (@components, @hooks, etc.)
+- [X] T088 Update CLAUDE.md with any new patterns or conventions from this feature
 
 ---
 

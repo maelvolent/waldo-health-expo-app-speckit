@@ -10,13 +10,13 @@
  */
 
 import { useState, useEffect } from 'react';
-import { Location as LocationType } from '../types/exposure';
+import { Location as LocationType } from '@types/exposure';
 import {
   getCurrentLocation,
   checkLocationPermission,
   requestLocationPermission,
   watchLocation,
-} from '../lib/location';
+} from '@lib/location';
 
 interface UseLocationResult {
   location: LocationType | null;

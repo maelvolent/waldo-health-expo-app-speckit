@@ -11,8 +11,8 @@
 
 import { useState, useEffect } from 'react';
 import { Camera } from 'expo-camera';
-import { processPhoto, validatePhoto } from '../lib/camera';
-import { PhotoLocal } from '../types/photo';
+import { processPhoto, validatePhoto } from '@lib/camera';
+import { PhotoLocal } from '@types/photo';
 
 interface UseCameraResult {
   hasPermission: boolean | null;
