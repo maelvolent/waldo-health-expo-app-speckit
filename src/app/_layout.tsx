@@ -11,7 +11,8 @@
  * 6. PerformanceMonitor - T116: Track app performance metrics
  */
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { View, Text, ActivityIndicator } from 'react-native';
 import { Slot } from 'expo-router';
 import { ClerkProvider, useAuth } from '@clerk/clerk-expo';
 import { ConvexProviderWithClerk } from 'convex/react-clerk';
@@ -52,19 +53,65 @@ const tokenCache = {
 /**
  * User Initializer - Ensures user exists in Convex on auth
  */
-function UserInitializer() {
-  const { isSignedIn } = useAuth();
+function UserInitializer({ children }: { children: React.ReactNode }) {
+  const { isSignedIn, isLoaded } = useAuth();
   const getOrCreateUser = useMutation(api.users.getOrCreate);
+  const [isInitialized, setIsInitialized] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (isSignedIn) {
-      getOrCreateUser().catch(err => {
-        console.error('Failed to initialize user:', err);
-      });
-    }
-  }, [isSignedIn, getOrCreateUser]);
+    let mounted = true;
 
-  return null;
+    async function initializeUser() {
+      if (!isSignedIn) {
+        setIsInitialized(true);
+        return;
+      }
+
+      try {
+        await getOrCreateUser();
+        if (mounted) {
+          setIsInitialized(true);
+          setError(null);
+        }
+      } catch (err) {
+        console.error('Failed to initialize user:', err);
+        if (mounted) {
+          setError(err instanceof Error ? err.message : 'Failed to initialize user');
+          // Retry after 2 seconds
+          setTimeout(() => {
+            if (mounted) {
+              setIsInitialized(false);
+            }
+          }, 2000);
+        }
+      }
+    }
+
+    if (isLoaded) {
+      initializeUser();
+    }
+
+    return () => {
+      mounted = false;
+    };
+  }, [isSignedIn, isLoaded, getOrCreateUser]);
+
+  // Show loading state while initializing
+  if (!isLoaded || (isSignedIn && !isInitialized)) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" />
+        {error && (
+          <Text style={{ marginTop: 16, color: 'red', textAlign: 'center' }}>
+            {error}
+          </Text>
+        )}
+      </View>
+    );
+  }
+
+  return <>{children}</>;
 }
 
 export default function RootLayout() {
@@ -85,10 +132,11 @@ export default function RootLayout() {
       <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
         <SafeAreaProvider>
           <PaperProvider>
-            <UserInitializer />
-            <NetworkMonitor />
-            <VoiceLanguageChecker />
-            <Slot />
+            <UserInitializer>
+              <NetworkMonitor />
+              <VoiceLanguageChecker />
+              <Slot />
+            </UserInitializer>
           </PaperProvider>
         </SafeAreaProvider>
       </ConvexProviderWithClerk>
