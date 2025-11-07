@@ -34,6 +34,7 @@ import { HazardScanResult } from '@components/exposure/HazardScanResult';
 import { FormProgress } from '@components/forms/FormProgress';
 import { InlineError } from '@components/forms/InlineError';
 import { DraftSaver } from '@components/forms/DraftSaver';
+import { GlassButton } from '@components/common/GlassButton';
 import { colors, spacing } from '@constants/theme';
 import { isAIDetectionEnabled } from '@constants/config';
 
@@ -554,17 +555,29 @@ export default function NewExposureScreen() {
           )}
         </View>
 
-        <TouchableOpacity
-          style={[styles.button, isSaving && styles.buttonDisabled]}
-          onPress={handleSave}
-          disabled={isSaving}
-        >
-          <Text style={styles.buttonText}>{isSaving ? 'Saving...' : 'Save Exposure'}</Text>
-        </TouchableOpacity>
+        {/* T032: Glass primary action button */}
+        <View style={styles.buttonContainer}>
+          <GlassButton
+            variant="primary"
+            onPress={handleSave}
+            disabled={isSaving}
+            loading={isSaving}
+            accessibilityLabel="Save exposure"
+            accessibilityHint="Save the exposure record"
+          >
+            {isSaving ? 'Saving...' : 'Save Exposure'}
+          </GlassButton>
 
-        <TouchableOpacity style={styles.cancelButton} onPress={() => router.back()}>
-          <Text style={styles.cancelButtonText}>Cancel</Text>
-        </TouchableOpacity>
+          <GlassButton
+            variant="secondary"
+            onPress={() => router.back()}
+            accessibilityLabel="Cancel"
+            accessibilityHint="Go back without saving"
+            style={styles.cancelButton}
+          >
+            Cancel
+          </GlassButton>
+        </View>
       </ScrollView>
 
       <Modal
@@ -704,24 +717,12 @@ const styles = StyleSheet.create({
     minHeight: 100,
     textAlignVertical: 'top',
   },
-  button: {
-    backgroundColor: colors.primary,
-    padding: spacing.lg,
-    borderRadius: 8,
-    alignItems: 'center',
+  // T032: Button container for glass buttons
+  buttonContainer: {
     marginTop: spacing.md,
-  },
-  buttonDisabled: {
-    backgroundColor: colors.textDisabled,
-  },
-  buttonText: {
-    color: colors.onPrimary,
-    fontSize: 18,
-    fontWeight: '600',
+    gap: spacing.sm,
   },
   cancelButton: {
-    padding: spacing.lg,
-    alignItems: 'center',
     marginTop: spacing.sm,
   },
   cancelButtonText: {
