@@ -150,18 +150,18 @@ Mobile React Native/Expo project structure:
 
 ### Implementation for User Story 5
 
-- [ ] T049 [P] [US5] Add accessibility labels to all buttons in home screen src/app/(tabs)/index.tsx
-- [ ] T050 [P] [US5] Add accessibility labels to all buttons in list screen src/app/(tabs)/list.tsx
-- [ ] T051 [P] [US5] Add accessibility labels to all buttons in new exposure screen src/app/(tabs)/new.tsx
-- [ ] T052 [P] [US5] Add accessibility labels to all buttons in export screen src/app/(tabs)/export.tsx
-- [ ] T053 [P] [US5] Add accessibility labels to all buttons in profile screen src/app/(tabs)/profile.tsx
-- [ ] T054 [P] [US5] Add accessibility labels to all form inputs in new exposure screen src/app/(tabs)/new.tsx
-- [ ] T055 [P] [US5] Audit and fix touch target sizes (<44x44) in Button component src/components/common/Button.tsx
-- [ ] T056 [P] [US5] Audit and fix touch target sizes in Card component src/components/common/Card.tsx
-- [ ] T057 [P] [US5] Add haptic feedback to button taps using useHaptics in src/components/common/Button.tsx
-- [ ] T058 [P] [US5] Add haptic feedback to card taps in ExposureCard src/components/exposure/ExposureCard.tsx
-- [ ] T059 [P] [US5] Add haptic feedback to tab navigation switches in src/app/(tabs)/_layout.tsx
-- [ ] T060 [US5] Verify logical reading order for screen readers in all screens using accessibilityRole
+- [X] T049 [P] [US5] Add accessibility labels to all buttons in home screen src/app/(tabs)/index.tsx
+- [X] T050 [P] [US5] Add accessibility labels to all buttons in list screen src/app/(tabs)/list.tsx
+- [X] T051 [P] [US5] Add accessibility labels to all buttons in new exposure screen src/app/(tabs)/new.tsx
+- [X] T052 [P] [US5] Add accessibility labels to all buttons in export screen src/app/(tabs)/export.tsx
+- [X] T053 [P] [US5] Add accessibility labels to all buttons in profile screen src/app/(tabs)/profile.tsx
+- [X] T054 [P] [US5] Add accessibility labels to all form inputs in new exposure screen src/app/(tabs)/new.tsx
+- [X] T055 [P] [US5] Audit and fix touch target sizes (<44x44) in Button component src/components/common/Button.tsx
+- [X] T056 [P] [US5] Audit and fix touch target sizes in Card component src/components/common/Card.tsx
+- [X] T057 [P] [US5] Add haptic feedback to button taps using useHaptics in src/components/common/Button.tsx
+- [X] T058 [P] [US5] Add haptic feedback to card taps in ExposureCard src/components/exposure/ExposureCard.tsx
+- [X] T059 [P] [US5] Add haptic feedback to tab navigation switches in src/app/(tabs)/_layout.tsx
+- [X] T060 [US5] Verify logical reading order for screen readers in all screens using accessibilityRole
 
 **Checkpoint**: All accessibility improvements in place - app is fully usable with screen readers and meets WCAG 2.1 AA touch target requirements
 

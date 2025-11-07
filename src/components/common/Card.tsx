@@ -1,16 +1,19 @@
 /**
  * Card Component
  * T047: Accessible card container with consistent styling
+ * T058: Haptic feedback on card taps
  *
  * WCAG 2.1 AA Compliant:
  * - Sufficient contrast for backgrounds
  * - Touch target size for interactive cards
  * - Clear visual hierarchy
+ * - Haptic feedback for interactive cards
  */
 
 import React from 'react';
 import { StyleSheet, View, ViewStyle, Pressable } from 'react-native';
 import { colors, spacing } from '@constants/theme';
+import { useHaptics } from '@hooks/useHaptics';
 
 interface CardProps {
   children: React.ReactNode;
@@ -29,13 +32,23 @@ export function Card({
   accessibilityLabel,
   accessibilityHint,
 }: CardProps) {
+  // T058: Haptic feedback
+  const { light } = useHaptics();
+
+  const handlePress = () => {
+    if (onPress) {
+      light(); // Haptic feedback on tap
+      onPress();
+    }
+  };
+
   const cardStyle = [styles.card, { elevation }, style];
 
   if (onPress) {
     return (
       <Pressable
         style={({ pressed }) => [cardStyle, pressed && styles.pressed]}
-        onPress={onPress}
+        onPress={handlePress}
         accessible={true}
         accessibilityLabel={accessibilityLabel}
         accessibilityHint={accessibilityHint}

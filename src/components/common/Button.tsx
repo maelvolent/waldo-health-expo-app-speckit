@@ -1,6 +1,7 @@
 /**
  * Button Component
  * T046: Accessible button with WCAG 2.1 AA compliance
+ * T057: Haptic feedback on button taps
  *
  * Features:
  * - Minimum 44x44px touch target
@@ -8,12 +9,14 @@
  * - Loading state
  * - Disabled state
  * - Multiple variants
+ * - Haptic feedback
  */
 
 import React from 'react';
 import { StyleSheet, ViewStyle } from 'react-native';
 import { Button as PaperButton } from 'react-native-paper';
 import { colors, touchTarget } from '@constants/theme';
+import { useHaptics } from '@hooks/useHaptics';
 
 interface ButtonProps {
   title: string;
@@ -38,6 +41,16 @@ export function Button({
   style,
   accessibilityHint,
 }: ButtonProps) {
+  // T057: Haptic feedback
+  const { light } = useHaptics();
+
+  const handlePress = () => {
+    if (!disabled && !loading) {
+      light(); // Haptic feedback on tap
+      onPress();
+    }
+  };
+
   const mode =
     variant === 'primary' || variant === 'secondary'
       ? 'contained'
@@ -51,7 +64,7 @@ export function Button({
   return (
     <PaperButton
       mode={mode}
-      onPress={onPress}
+      onPress={handlePress}
       disabled={disabled || loading}
       loading={loading}
       icon={icon}

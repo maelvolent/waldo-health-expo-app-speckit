@@ -1,16 +1,31 @@
 /**
  * Tab Navigation Layout
  * Configures bottom tab navigation with icons and styling
+ * T059: Haptic feedback on tab switches
  */
 
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import * as Haptics from 'expo-haptics';
 
 export default function TabLayout() {
+  // T059: Tab press handler with haptic feedback
+  const handleTabPress = () => {
+    try {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    } catch (error) {
+      // Haptic feedback not available on this device
+      console.warn('Haptic feedback not available:', error);
+    }
+  };
+
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
+      }}
+      screenListeners={{
+        tabPress: handleTabPress,
       }}
     >
       <Tabs.Screen
