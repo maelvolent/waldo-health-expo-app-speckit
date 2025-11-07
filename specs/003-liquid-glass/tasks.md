@@ -1755,7 +1755,7 @@ Post-MVP can add:
 
 ### Phase 2: Navigation Glass Effects (8 tasks)
 
-- [ ] T016 [P2] [US1] Apply glass to bottom tab bar → `src/app/(tabs)/_layout.tsx` [ENHANCE]
+- [x] T016 [P2] [US1] Apply glass to bottom tab bar → `src/app/(tabs)/_layout.tsx` [ENHANCE]
 - [ ] T017 [P2] [US1] Apply glass to home screen header → `src/app/(tabs)/index.tsx` [ENHANCE]
 - [ ] T018 [P2] [US1] Test navigation glass across all tabs → `src/app/(tabs)/*.tsx` [ENHANCE]
 - [ ] T019 [P2] [US1] Add glass to exposure detail header → `src/app/exposure/[id].tsx` [ENHANCE]
