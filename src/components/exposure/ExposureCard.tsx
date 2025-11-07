@@ -19,10 +19,11 @@
  */
 
 import React, { useMemo, useCallback, useState } from 'react';
-import { View, StyleSheet, Image, Alert, Modal, Pressable } from 'react-native';
+import { View, StyleSheet, Image, Alert, Pressable } from 'react-native';
 import { Text, IconButton } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import { GlassCard } from '@components/common/GlassCard';
+import { GlassModal } from '@components/common/GlassModal';
 import { EXPOSURE_TYPES } from '@constants/exposureTypes';
 import { colors, spacing } from '@constants/theme';
 import { format } from 'date-fns';
@@ -180,14 +181,12 @@ export const ExposureCard = React.memo(function ExposureCard({
       </View>
     </GlassCard>
 
-    {/* T076: Context menu modal */}
-    <Modal
+    {/* T076 + T038: Context menu with glass modal */}
+    <GlassModal
       visible={showMenu}
-      transparent={true}
-      animationType="fade"
-      onRequestClose={() => setShowMenu(false)}
+      onClose={() => setShowMenu(false)}
+      title="Options"
     >
-      <Pressable style={styles.modalOverlay} onPress={() => setShowMenu(false)}>
         <View style={styles.contextMenu}>
           <Pressable
             style={styles.menuItem}
@@ -241,8 +240,7 @@ export const ExposureCard = React.memo(function ExposureCard({
             <Text style={styles.menuItemText}>Cancel</Text>
           </Pressable>
         </View>
-      </Pressable>
-    </Modal>
+    </GlassModal>
   </>
   );
 }, (prevProps, nextProps) => {
@@ -359,20 +357,9 @@ const styles = StyleSheet.create({
     flex: 1,
     color: colors.textSecondary,
   },
-  // T076: Context menu styles
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: spacing.xl,
-  },
+  // T076 + T038: Context menu styles (glass modal handles overlay)
   contextMenu: {
-    backgroundColor: colors.surface,
-    borderRadius: 12,
     width: '100%',
-    maxWidth: 300,
-    overflow: 'hidden',
   },
   menuItem: {
     flexDirection: 'row',
