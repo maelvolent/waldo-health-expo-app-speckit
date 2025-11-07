@@ -1734,16 +1734,16 @@ Post-MVP can add:
 
 ### Phase 0: Setup & Dependencies (3 tasks)
 
-- [ ] T001 [P0] Install expo-blur library → `package.json`, `package-lock.json`
-- [ ] T002 [P0] Create glass configuration constants → `src/constants/glassConfig.ts` [NEW]
-- [ ] T003 [P0] Extend theme with glass color tokens → `src/constants/theme.ts` [ENHANCE]
+- [x] T001 [P0] Install expo-blur library → `package.json`, `package-lock.json`
+- [x] T002 [P0] Create glass configuration constants → `src/constants/glassConfig.ts` [NEW]
+- [x] T003 [P0] Extend theme with glass color tokens → `src/constants/theme.ts` [ENHANCE]
 
 ### Phase 1: Foundation Components (12 tasks)
 
-- [ ] T004 [P1] [US1] Create GlassEffect wrapper component → `src/components/common/GlassEffect.tsx` [NEW]
-- [ ] T005 [P1] Create useBlurSupport capability detection hook → `src/hooks/useBlurSupport.ts` [NEW]
-- [ ] T006 [P1] Create useGlassTheme preset management hook → `src/hooks/useGlassTheme.ts` [NEW]
-- [ ] T007 [P1] Create accessibility contrast validation utility → `src/utils/accessibility.ts` [NEW]
+- [x] T004 [P1] [US1] Create GlassEffect wrapper component → `src/components/common/GlassEffect.tsx` [NEW]
+- [x] T005 [P1] Create useBlurSupport capability detection hook → `src/hooks/useBlurSupport.ts` [NEW]
+- [x] T006 [P1] Create useGlassTheme preset management hook → `src/hooks/useGlassTheme.ts` [NEW]
+- [x] T007 [P1] Create accessibility contrast validation utility → `src/utils/accessibility.ts` [NEW]
 - [ ] T008 [P1] Add GlassCard component → `src/components/common/GlassCard.tsx` [NEW]
 - [ ] T009 [P1] Add GlassButton component → `src/components/common/GlassButton.tsx` [NEW]
 - [ ] T010 [P1] Add GlassModal component → `src/components/common/GlassModal.tsx` [NEW]

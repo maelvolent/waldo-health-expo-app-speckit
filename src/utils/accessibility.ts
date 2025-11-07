@@ -289,3 +289,61 @@ export function combineA11yProps(
 ): Record<string, any> {
   return Object.assign({}, ...props);
 }
+
+/**
+ * Validate glass surface contrast meets WCAG 2.1 AA standards
+ * (003-liquid-glass specific)
+ *
+ * WCAG 2.1 AA Requirements:
+ * - Normal text: 4.5:1 minimum
+ * - Large text (18pt+): 3:1 minimum
+ * - UI components: 3:1 minimum
+ *
+ * @param fallbackColor - Solid fallback color for glass surface
+ * @param textColor - Text color to display on glass
+ * @param minimumRatio - Minimum contrast ratio (default: 4.5 for normal text)
+ * @returns Validation result with accessibility status and actual ratio
+ *
+ * @example
+ * ```tsx
+ * const result = validateGlassContrast('#F5F5F5', '#212121');
+ * console.log(result.isAccessible); // true
+ * console.log(result.ratio); // 16.1
+ * console.log(result.level); // 'AAA'
+ * ```
+ */
+export function validateGlassContrast(
+  fallbackColor: string,
+  textColor: string,
+  minimumRatio: number = CONTRAST_RATIOS.NORMAL_TEXT
+): {
+  isAccessible: boolean;
+  ratio: number;
+  level: 'AAA' | 'AA' | 'FAIL';
+  message: string;
+} {
+  const ratio = getContrastRatio(fallbackColor, textColor);
+
+  // Determine WCAG level
+  let level: 'AAA' | 'AA' | 'FAIL';
+  if (ratio >= 7.0) {
+    level = 'AAA';
+  } else if (ratio >= 4.5) {
+    level = 'AA';
+  } else {
+    level = 'FAIL';
+  }
+
+  const isAccessible = ratio >= minimumRatio;
+
+  const message = isAccessible
+    ? `Contrast ratio ${ratio.toFixed(2)}:1 meets WCAG ${level} (≥${minimumRatio}:1 required)`
+    : `Contrast ratio ${ratio.toFixed(2)}:1 fails WCAG AA (≥${minimumRatio}:1 required)`;
+
+  return {
+    isAccessible,
+    ratio: parseFloat(ratio.toFixed(2)),
+    level,
+    message,
+  };
+}
