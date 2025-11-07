@@ -7,6 +7,7 @@ import { colors, spacing, typography } from '@constants/theme';
 import { useQuery } from 'convex/react';
 import { api } from '../../../convex/_generated/api';
 import { SkeletonText } from '@components/common/SkeletonText';
+import { GlassNavBar } from '@components/common/GlassNavBar';
 
 export default function Index() {
   const { isSignedIn, signOut } = useAuth();
@@ -50,8 +51,18 @@ export default function Index() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
+    <SafeAreaView style={styles.container} edges={['bottom']}>
+      {/* T017: Glass navigation bar */}
+      <GlassNavBar
+        title="Waldo Health"
+        testID="home-nav-bar"
+      />
+
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+        contentInsetAdjustmentBehavior="automatic"
+      >
         {/* Header */}
         <View style={styles.header}>
           <Text style={styles.greeting}>Welcome back, {user?.firstName || 'User'}!</Text>
@@ -175,6 +186,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
+    // T017: Add top padding for glass nav bar (56px nav + safe area)
+    paddingTop: 72,
     padding: spacing.lg,
     paddingBottom: spacing.xl * 2,
   },
