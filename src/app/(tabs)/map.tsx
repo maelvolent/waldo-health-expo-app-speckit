@@ -20,11 +20,9 @@ export default function MapScreen() {
   const [selectedTypes, setSelectedTypes] = useState<Set<string>>(new Set());
   const [showFilters, setShowFilters] = useState(false);
 
-  // Fetch all exposures for the user
-  const exposures = useQuery(
-    api.exposures.list,
-    userId ? { userId: userId as any } : 'skip'
-  );
+  // Fetch all exposures for the user (userId comes from auth context in Convex)
+  const exposuresData = useQuery(api.exposures.list, userId ? {} : 'skip');
+  const exposures = exposuresData?.exposures || [];
 
   // Filter exposures by selected types
   const filteredExposures =
