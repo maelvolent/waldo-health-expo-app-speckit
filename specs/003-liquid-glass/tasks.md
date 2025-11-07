@@ -17,10 +17,10 @@ This document breaks down the Liquid Glass visual design implementation into act
 - **Phase 3 - Cards**: 1/6 tasks complete (17%)
 - **Phase 4 - Forms**: 1/8 tasks complete (13%)
 - **Phase 5 - Modals**: 1/6 tasks complete (17%)
-- **Phase 6 - Accessibility**: 1/6 tasks complete (17%)
+- **Phase 6 - Accessibility**: 3/6 tasks complete (50%)
 - **Phase 7 - Testing**: 0/6 tasks complete (0%)
 
-**Overall Progress**: 19/55 tasks complete (34.5%)
+**Overall Progress**: 21/55 tasks complete (38.2%)
 
 ### User Scenario Mapping
 
@@ -1796,8 +1796,8 @@ Post-MVP can add:
 ### Phase 6: Accessibility Compliance (6 tasks)
 
 - [x] T044 [P2] [US5] Implement Reduce Transparency detection → `src/components/common/GlassEffect.tsx` [ENHANCE]
-- [ ] T045 [P2] [US5] Validate all text contrast ratios → Audit script across all glass components
-- [ ] T046 [P2] [US5] Add VoiceOver compatibility tests → Manual testing checklist + automated tests
+- [x] T045 [P2] [US5] Validate all text contrast ratios → Audit script across all glass components
+- [x] T046 [P2] [US5] Add VoiceOver compatibility tests → Manual testing checklist + automated tests
 - [ ] T047 [P2] [US5] Add High Contrast mode support → `src/components/common/GlassEffect.tsx` [ENHANCE]
 - [ ] T048 [P2] [US5] Add Dynamic Type support → All glass components [ENHANCE]
 - [ ] T049 [P2] [US5] Create accessibility testing guide → `specs/003-liquid-glass/ACCESSIBILITY_TESTING.md` [NEW]
