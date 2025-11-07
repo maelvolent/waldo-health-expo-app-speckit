@@ -1751,7 +1751,7 @@ Post-MVP can add:
 - [ ] T012 [P1] Update Button component with glass variant → `src/components/common/Button.tsx` [ENHANCE]
 - [ ] T013 [P1] Update Card component with glass variant → `src/components/common/Card.tsx` [ENHANCE]
 - [ ] T014 [P1] Update EmptyState with glass icon containers → `src/components/common/EmptyState.tsx` [ENHANCE]
-- [ ] T015 [P1] Document component usage in CLAUDE.md → `CLAUDE.md` [ENHANCE]
+- [x] T015 [P1] Document component usage in CLAUDE.md → `CLAUDE.md` [ENHANCE]
 
 ### Phase 2: Navigation Glass Effects (8 tasks)
 

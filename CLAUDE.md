@@ -463,7 +463,166 @@ import { Card } from '@components/common/Card';
 - React Native Animated API for skeleton shimmer (002-ui-polish)
 - React.memo with custom comparison for performance (002-ui-polish)
 
+## Liquid Glass Patterns (003-liquid-glass)
+
+### Glass Effect Components
+All business logic for glass effects is in reusable components:
+
+```typescript
+// Core glass wrapper - use for any translucent surface
+import { GlassEffect } from '@components/common/GlassEffect';
+
+// With preset
+<GlassEffect preset="card">
+  <Text>Content</Text>
+</GlassEffect>
+
+// Custom configuration
+<GlassEffect
+  intensity={90}
+  tint="dark"
+  fallbackColor={colors.surfaceDark}
+  style={{ padding: 16, borderRadius: 12 }}
+>
+  <Text>Custom glass</Text>
+</GlassEffect>
+```
+
+### Glass Component Variants
+
+```typescript
+// Glass Card - interactive with haptics
+import { GlassCard } from '@components/common/GlassCard';
+
+<GlassCard
+  onPress={() => navigate('/details')}
+  onLongPress={showContextMenu}
+  accessibilityLabel="Exposure card"
+>
+  <Text>Card content</Text>
+</GlassCard>
+
+// Glass Button - three variants
+import { GlassButton } from '@components/common/GlassButton';
+
+<GlassButton variant="primary" onPress={handleSave}>
+  Save Exposure
+</GlassButton>
+
+<GlassButton variant="secondary" onPress={handleCancel}>
+  Cancel
+</GlassButton>
+
+<GlassButton variant="destructive" onPress={handleDelete}>
+  Delete
+</GlassButton>
+
+// Glass Modal - layered glass effects
+import { GlassModal } from '@components/common/GlassModal';
+
+<GlassModal
+  visible={showFilter}
+  onClose={() => setShowFilter(false)}
+  title="Filter Exposures"
+>
+  <FilterOptions />
+</GlassModal>
+
+// Glass Navigation Bar
+import { GlassNavBar } from '@components/common/GlassNavBar';
+
+<GlassNavBar
+  title="Exposure Details"
+  leftAction={{
+    icon: 'arrow-back',
+    onPress: () => router.back(),
+    accessibilityLabel: 'Go back'
+  }}
+  rightAction={{
+    icon: 'ellipsis-horizontal',
+    onPress: showMenu,
+    accessibilityLabel: 'More options'
+  }}
+/>
+```
+
+### Glass Presets
+
+Available presets in `src/constants/glassConfig.ts`:
+
+| Preset | Intensity | Tint | Use Case |
+|--------|-----------|------|----------|
+| `navigation` | 85 | light | Tab bars, headers |
+| `card` | 75 | light | Exposure cards, containers |
+| `modal` | 50 | dark | Modal backdrops |
+| `button` | 80 | light | Primary/secondary buttons |
+| `input` | 70 | default | Form input fields |
+
+### Accessibility Pattern
+All glass effects respect iOS "Reduce Transparency" and provide WCAG 2.1 AA compliant fallbacks:
+
+```typescript
+import { useBlurSupport } from '@hooks/useBlurSupport';
+
+const capability = useBlurSupport();
+
+// Automatically handled by GlassEffect component
+// iOS: Uses BlurView with specified intensity
+// Android: Uses opaque fallback color
+// iOS Reduce Transparency: Uses opaque fallback color
+```
+
+### Performance Guidelines
+
+```typescript
+// ✅ GOOD: Limited glass instances
+<GlassEffect preset="navigation">
+  <TabBar />
+</GlassEffect>
+
+<ScrollView>
+  {visibleItems.map(item => (
+    <GlassCard key={item.id}>  {/* Max 5 visible at once */}
+      <Content />
+    </GlassCard>
+  ))}
+</ScrollView>
+
+// ❌ BAD: Excessive glass (performance impact)
+{allItems.map(item => (
+  <GlassEffect>  {/* 50+ instances = frame drops */}
+    <Card />
+  </GlassEffect>
+))}
+```
+
+**Performance Rules**:
+- Maximum 5 simultaneous glass views per screen
+- No glass nesting (avoid `<GlassEffect><GlassEffect>`)
+- Use static rasterization for non-animated glass
+- Profile on iPhone 12 as minimum baseline
+
+### Theme Integration
+
+Glass effects use theme tokens for consistency:
+
+```typescript
+import { glassColors } from '@constants/theme';
+
+// Pre-validated contrast ratios
+glassColors.glassLight    // 16.1:1 contrast on text
+glassColors.glassDark     // >12:1 contrast on white text
+glassColors.glassPrimary  // 4.52:1 contrast on primary text
+```
+
 ## Recent Changes
+- 003-liquid-glass: Implemented Phase 0-1 foundation (11/55 tasks)
+  - Core GlassEffect wrapper with iOS/Android support
+  - Glass component variants (Card, Button, Modal, NavBar)
+  - Capability detection and preset management hooks
+  - WCAG 2.1 AA accessibility compliance
+  - Platform-aware fallbacks (Reduce Transparency, Android)
+
 - 002-ui-polish: Completed Phases 1-9 (71/88 tasks)
   - Created 18 new files (13 components + 5 hooks)
   - Professional icon system with Ionicons
