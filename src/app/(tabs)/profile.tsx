@@ -27,7 +27,7 @@ export default function ProfileScreen() {
   const { userId } = useAuth();
 
   // Fetch user preferences
-  const userData = useQuery(api.users.getCurrentUser, userId ? {} : 'skip');
+  const userData = useQuery(api.users.get, userId ? {} : 'skip');
   const updatePreferences = useMutation(api.users.updatePreferences);
 
   // Local state for preferences
