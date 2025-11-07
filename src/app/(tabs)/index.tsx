@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { colors, spacing } from '@constants/theme';
 import { useQuery } from 'convex/react';
 import { api } from '../../../convex/_generated/api';
+import { SkeletonText } from '@components/common/SkeletonText';
 
 export default function Index() {
   const { isSignedIn, signOut } = useAuth();
@@ -94,7 +95,14 @@ export default function Index() {
               />
             </View>
             <Text style={styles.cardTitle}>View History</Text>
-            <Text style={styles.cardDescription}>{recentCount} recent exposures</Text>
+            {/* T036: Skeleton loading for statistics */}
+            {exposures === undefined ? (
+              <View style={{ width: '100%', paddingHorizontal: spacing.md }}>
+                <SkeletonText width="80%" size="small" />
+              </View>
+            ) : (
+              <Text style={styles.cardDescription}>{recentCount} recent exposures</Text>
+            )}
           </TouchableOpacity>
 
           {/* Export Card */}

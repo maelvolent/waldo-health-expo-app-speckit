@@ -22,6 +22,8 @@ import { useFilter } from '@hooks/useFilter';
 import { SearchBar } from '@components/exposure/SearchBar';
 import { FilterBar } from '@components/exposure/FilterBar';
 import { ExposureCard } from '@components/exposure/ExposureCard';
+import { SkeletonList } from '@components/common/SkeletonList';
+import { EmptyState } from '@components/common/EmptyState';
 import { colors, spacing } from '@constants/theme';
 
 export default function ExposuresListScreen() {
@@ -42,6 +44,40 @@ export default function ExposuresListScreen() {
   const handleCardPress = (exposureId: string) => {
     router.push(`/exposure/${exposureId}`);
   };
+
+  const hasActiveFilters =
+    (filters.exposureType && filters.exposureType.length > 0) ||
+    (filters.severity && filters.severity.length > 0);
+
+  const hasSearchQuery = query.length > 0;
+
+  /**
+   * T032: Show skeleton loading when data is undefined (initial load)
+   */
+  if (exposures === undefined && isLoading) {
+    return (
+      <SafeAreaView style={styles.container} edges={['top']}>
+        {/* Header */}
+        <View style={styles.header}>
+          <Text style={styles.title}>Exposures</Text>
+          <View style={styles.statusContainer}>
+            <Ionicons
+              name={isOnline ? 'cloud-done' : 'cloud-offline'}
+              size={16}
+              color={isOnline ? colors.success : colors.offline}
+              accessibilityLabel={isOnline ? 'Online' : 'Offline'}
+            />
+            <Text style={styles.status}>
+              {isOnline ? 'Online' : 'Offline'}
+            </Text>
+          </View>
+        </View>
+
+        {/* Skeleton Loading State */}
+        <SkeletonList count={6} />
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
@@ -94,27 +130,43 @@ export default function ExposuresListScreen() {
         )}
         keyExtractor={item => item._id}
         contentContainerStyle={styles.listContent}
-        ListEmptyComponent={
-          <View style={styles.emptyState}>
-            <Ionicons
-              name={query || filters.exposureType || filters.severity ? 'search' : 'document-text-outline'}
-              size={64}
-              color={colors.icon.muted}
-              style={styles.emptyIcon}
-              accessibilityLabel={query || filters.exposureType || filters.severity ? 'No results' : 'No exposures'}
+        ListEmptyComponent={() => {
+          // T035: Empty state for no filter results with clear filters CTA
+          if (hasActiveFilters || hasSearchQuery) {
+            return (
+              <EmptyState
+                icon="search"
+                title="No exposures found"
+                description={
+                  hasSearchQuery && hasActiveFilters
+                    ? 'No exposures match your search and filters. Try adjusting your criteria.'
+                    : hasSearchQuery
+                      ? 'No exposures match your search. Try different keywords.'
+                      : 'No exposures match the selected filters.'
+                }
+                ctaLabel="Clear Filters"
+                onCtaPress={() => {
+                  setQuery('');
+                  setFilters({
+                    exposureType: undefined,
+                    severity: undefined,
+                  });
+                }}
+              />
+            );
+          }
+
+          // T033: Empty state to list screen when data length is zero
+          return (
+            <EmptyState
+              icon="document-text-outline"
+              title="No exposures yet"
+              description='Tap "Document Exposure" on the home screen to create your first exposure record'
+              ctaLabel="Go to Home"
+              onCtaPress={() => router.push('/')}
             />
-            <Text style={styles.emptyText}>
-              {query || filters.exposureType || filters.severity
-                ? 'No exposures match your search'
-                : 'No exposures yet'}
-            </Text>
-            <Text style={styles.emptyHint}>
-              {query || filters.exposureType || filters.severity
-                ? 'Try adjusting your filters or search terms'
-                : 'Tap "Document Exposure" on the home screen to create your first record'}
-            </Text>
-          </View>
-        }
+          );
+        }}
         refreshControl={
           <RefreshControl
             refreshing={isLoading}
@@ -164,25 +216,5 @@ const styles = StyleSheet.create({
   },
   listContent: {
     padding: spacing.md,
-  },
-  emptyState: {
-    padding: spacing.xl * 2,
-    alignItems: 'center',
-  },
-  emptyIcon: {
-    marginBottom: spacing.lg,
-  },
-  emptyText: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: colors.text,
-    marginBottom: spacing.sm,
-    textAlign: 'center',
-  },
-  emptyHint: {
-    fontSize: 14,
-    color: colors.textSecondary,
-    textAlign: 'center',
-    lineHeight: 22,
   },
 });

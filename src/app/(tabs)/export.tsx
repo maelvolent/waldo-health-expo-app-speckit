@@ -42,6 +42,7 @@ export default function ExportScreen() {
   const [selectedFormat, setSelectedFormat] = useState<ExportFormat>('pdf');
   const [isExporting, setIsExporting] = useState(false);
   const [exportProgress, setExportProgress] = useState('');
+  const [exportPercentage, setExportPercentage] = useState(0); // T038: Track percentage
   const [allExposures, setAllExposures] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -93,6 +94,7 @@ export default function ExportScreen() {
     try {
       setIsExporting(true);
       setExportProgress('Preparing export...');
+      setExportPercentage(0); // T038: Reset percentage
 
       const userInfo = {
         name: convexUser.name || user?.fullName || null,
@@ -108,9 +110,11 @@ export default function ExportScreen() {
       if (selectedFormat === 'pdf') {
         // T070: PDF generation with progress indicator
         setExportProgress(`Generating PDF with ${exposureCount} exposures...`);
+        setExportPercentage(10); // T038: 10% - Started
 
         // Fetch all photo URLs for PDF export
         setExportProgress('Fetching photos...');
+        setExportPercentage(25); // T038: 25% - Fetching photos
         const allPhotoIds = allExposures.flatMap(exp => exp.photoIds || []);
         const photoUrlsMap = new Map<string, string>();
 
@@ -133,6 +137,7 @@ export default function ExportScreen() {
         setExportProgress(
           `Generating PDF with ${exposureCount} exposures and ${photoUrlsMap.size} photos...`
         );
+        setExportPercentage(50); // T038: 50% - Starting PDF generation
 
         // T073: Chunk large exports (>50 exposures = 20 per PDF)
         if (exposureCount > 50) {
@@ -153,11 +158,14 @@ export default function ExportScreen() {
         }
 
         fileUri = await generatePDF(allExposures, userInfo, photoUrlsMap);
+        setExportPercentage(80); // T038: 80% - PDF generated
         fileName = `waldo-health-exposures-${format(new Date(), 'yyyy-MM-dd')}.pdf`;
       } else if (selectedFormat === 'csv') {
         // T071: CSV generation
         setExportProgress('Generating CSV...');
+        setExportPercentage(50); // T038: 50% - Starting CSV generation
         const csvContent = generateCSV(allExposures as any);
+        setExportPercentage(80); // T038: 80% - CSV generated
 
         // Write CSV to file
         fileUri =
@@ -169,7 +177,9 @@ export default function ExportScreen() {
       } else {
         // CSV Summary
         setExportProgress('Generating summary...');
+        setExportPercentage(50); // T038: 50% - Starting summary generation
         const summaryContent = generateCSVSummary(allExposures as any);
+        setExportPercentage(80); // T038: 80% - Summary generated
 
         fileUri =
           FileSystem.documentDirectory +
@@ -181,6 +191,7 @@ export default function ExportScreen() {
       }
 
       setExportProgress('Export complete!');
+      setExportPercentage(100); // T038: 100% - Complete
 
       // T072: Share functionality
       const canShare = await Sharing.isAvailableAsync();
@@ -199,6 +210,7 @@ export default function ExportScreen() {
 
       setIsExporting(false);
       setExportProgress('');
+      setExportPercentage(0); // T038: Reset
     } catch (error) {
       console.error('Export error:', error);
       Alert.alert(
@@ -207,6 +219,7 @@ export default function ExportScreen() {
       );
       setIsExporting(false);
       setExportProgress('');
+      setExportPercentage(0); // T038: Reset
     }
   }
 
@@ -226,7 +239,9 @@ export default function ExportScreen() {
       setExportProgress(`Generating ${chunks.length} PDF files...`);
 
       for (let i = 0; i < chunks.length; i++) {
+        const progress = Math.round(((i + 1) / chunks.length) * 100);
         setExportProgress(`Generating PDF ${i + 1} of ${chunks.length}...`);
+        setExportPercentage(progress); // T038: Update percentage for chunks
 
         const fileUri = await generatePDF(
           chunks[i],
@@ -252,11 +267,13 @@ export default function ExportScreen() {
       Alert.alert('Success', `Generated ${chunks.length} PDF files`);
       setIsExporting(false);
       setExportProgress('');
+      setExportPercentage(0); // T038: Reset
     } catch (error) {
       console.error('Chunked PDF error:', error);
       Alert.alert('Export Failed', 'An error occurred while generating chunked PDFs');
       setIsExporting(false);
       setExportProgress('');
+      setExportPercentage(0); // T038: Reset
     }
   }
 
@@ -355,6 +372,24 @@ export default function ExportScreen() {
             </Text>
           </View>
 
+          {/* T038: Progress indicator with percentage */}
+          {isExporting && (
+            <View style={styles.progressContainer}>
+              <View style={styles.progressHeader}>
+                <Text style={styles.progressText}>{exportProgress}</Text>
+                <Text style={styles.progressPercentage}>{exportPercentage}%</Text>
+              </View>
+              <View style={styles.progressBarBackground}>
+                <View
+                  style={[
+                    styles.progressBarFill,
+                    { width: `${exportPercentage}%` },
+                  ]}
+                />
+              </View>
+            </View>
+          )}
+
           <TouchableOpacity
             style={[styles.exportButton, isExporting && styles.exportButtonDisabled]}
             onPress={handleExport}
@@ -363,7 +398,7 @@ export default function ExportScreen() {
             {isExporting ? (
               <View style={styles.exportingContent}>
                 <ActivityIndicator color="#fff" size="small" />
-                <Text style={styles.exportButtonText}>{exportProgress}</Text>
+                <Text style={styles.exportButtonText}>Exporting...</Text>
               </View>
             ) : (
               <Text style={styles.exportButtonText}>
@@ -533,5 +568,42 @@ const styles = StyleSheet.create({
     marginTop: spacing.md,
     fontSize: 16,
     color: colors.textSecondary,
+  },
+  // T038: Progress indicator styles
+  progressContainer: {
+    marginBottom: spacing.lg,
+    padding: spacing.md,
+    backgroundColor: colors.surface,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  progressHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: spacing.sm,
+  },
+  progressText: {
+    fontSize: 14,
+    color: colors.text,
+    flex: 1,
+  },
+  progressPercentage: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: colors.primary,
+    marginLeft: spacing.sm,
+  },
+  progressBarBackground: {
+    height: 8,
+    backgroundColor: colors.border,
+    borderRadius: 4,
+    overflow: 'hidden',
+  },
+  progressBarFill: {
+    height: '100%',
+    backgroundColor: colors.primary,
+    borderRadius: 4,
   },
 });

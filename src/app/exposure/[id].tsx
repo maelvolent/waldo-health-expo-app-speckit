@@ -19,6 +19,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { format } from 'date-fns';
 import { useExposure } from '@hooks/useExposures';
 import { LoadingSpinner } from '@components/common/LoadingSpinner';
+import { SkeletonText } from '@components/common/SkeletonText';
+import { SkeletonCard } from '@components/common/SkeletonCard';
 import { Button } from '@components/common/Button';
 import { Card } from '@components/common/Card';
 import { EXPOSURE_TYPES, PPE_TYPES } from '@constants/exposureTypes';
@@ -77,9 +79,38 @@ export default function ExposureDetailScreen() {
     Alert.alert('Share', 'Share functionality coming soon');
   }
 
-  // Loading state
+  // T037: Skeleton loading state
   if (isLoading) {
-    return <LoadingSpinner fullScreen message="Loading exposure..." />;
+    return (
+      <SafeAreaView style={styles.container} edges={['top']}>
+        <Appbar.Header>
+          <Appbar.BackAction onPress={() => router.back()} />
+          <Appbar.Content title="Exposure Details" />
+        </Appbar.Header>
+        <ScrollView style={styles.content} contentContainerStyle={styles.contentContainer}>
+          {/* Header Skeleton */}
+          <Card>
+            <View style={styles.header}>
+              <View style={{ marginBottom: spacing.md }}>
+                <SkeletonText width="60%" size="large" />
+              </View>
+              <View style={{ marginBottom: spacing.sm }}>
+                <SkeletonText width="40%" size="small" />
+              </View>
+              <View style={{ marginBottom: spacing.md }}>
+                <SkeletonText width="30%" size="small" />
+              </View>
+              <SkeletonText width={120} size="medium" />
+            </View>
+          </Card>
+
+          {/* Content Skeleton Cards */}
+          <SkeletonCard />
+          <SkeletonCard />
+          <SkeletonCard />
+        </ScrollView>
+      </SafeAreaView>
+    );
   }
 
   // Not found
