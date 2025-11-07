@@ -16,6 +16,7 @@ import {
   clampIntensity,
 } from '@constants/glassConfig';
 import { colors } from '@constants/theme';
+import { useBlurSupport } from '@hooks/useBlurSupport';
 
 export interface GlassEffectProps {
   /** Content to render within the glass surface */
@@ -87,6 +88,9 @@ export const GlassEffect = React.memo<GlassEffectProps>(
     preset,
     testID,
   }) => {
+    // T044: Detect Reduce Transparency accessibility setting
+    const capability = useBlurSupport();
+
     // Load preset configuration if specified
     const config = useMemo(() => {
       if (preset) {
@@ -110,10 +114,11 @@ export const GlassEffect = React.memo<GlassEffectProps>(
       [config.intensity]
     );
 
-    // Determine if we should render blur or fallback
+    // T044: Determine if we should render blur or fallback
+    // Respect iOS Reduce Transparency accessibility setting
     const shouldRenderBlur = useMemo(() => {
-      return enabled && Platform.OS === 'ios';
-    }, [enabled]);
+      return enabled && Platform.OS === 'ios' && !capability.reduceTransparencyEnabled;
+    }, [enabled, capability.reduceTransparencyEnabled]);
 
     // iOS: Render BlurView with glass effect
     if (shouldRenderBlur) {
