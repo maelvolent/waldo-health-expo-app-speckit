@@ -12,7 +12,9 @@
 import React from 'react';
 import { View, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { Text } from 'react-native-paper';
+import { Ionicons } from '@expo/vector-icons';
 import { EXPOSURE_TYPES, ExposureTypeDefinition } from '@constants/exposureTypes';
+import { EXPOSURE_TYPE_ICONS } from '@constants/icons';
 import { colors, spacing, touchTarget } from '@constants/theme';
 
 interface ExposureTypeSelectorProps {
@@ -77,7 +79,12 @@ export function ExposureTypeSelector({ selectedType, onSelect }: ExposureTypeSel
                         { backgroundColor: getCategoryColor(type.category) },
                       ]}
                     >
-                      <Text style={styles.icon}>{getIcon(type.iconName)}</Text>
+                      <Ionicons
+                        name={getIconName(type.id)}
+                        size={28}
+                        color="#FFFFFF"
+                        accessibilityLabel={`${type.label} icon`}
+                      />
                     </View>
                     <Text
                       style={[styles.typeLabel, isSelected && styles.typeLabelSelected]}
@@ -105,25 +112,11 @@ function getCategoryColor(category: string): string {
 }
 
 /**
- * Get icon emoji for exposure type
- * In production, replace with actual icon images
+ * Get Ionicons name for exposure type
+ * Maps exposure type IDs to icon names from EXPOSURE_TYPE_ICONS
  */
-function getIcon(iconName: string): string {
-  const iconMap: Record<string, string> = {
-    'silica-dust': '💨',
-    'asbestos-a': '🏗️',
-    'asbestos-b': '⚠️',
-    chemicals: '🧪',
-    noise: '🔊',
-    meth: '☣️',
-    mould: '🍄',
-    'contaminated-soil': '🌍',
-    'heat-stress': '🌡️',
-    'welding-fumes': '⚡',
-    biological: '🦠',
-    radiation: '☢️',
-  };
-  return iconMap[iconName] || '📋';
+function getIconName(exposureTypeId: string): keyof typeof Ionicons.glyphMap {
+  return EXPOSURE_TYPE_ICONS[exposureTypeId] || 'document-text-outline';
 }
 
 const styles = StyleSheet.create({
@@ -168,9 +161,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: spacing.sm,
-  },
-  icon: {
-    fontSize: 24,
   },
   typeLabel: {
     fontSize: 14,

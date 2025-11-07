@@ -21,6 +21,7 @@
 import React, { useMemo, useCallback } from 'react';
 import { View, StyleSheet, Image } from 'react-native';
 import { Text, IconButton } from 'react-native-paper';
+import { Ionicons } from '@expo/vector-icons';
 import { Card } from '@components/common/Card';
 import { EXPOSURE_TYPES } from '@constants/exposureTypes';
 import { colors, spacing } from '@constants/theme';
@@ -93,9 +94,12 @@ export const ExposureCard = React.memo(function ExposureCard({ exposure, thumbna
             />
           ) : (
             <View style={[styles.thumbnail, styles.placeholderThumbnail]}>
-              <Text style={styles.placeholderIcon}>
-                {exposure.photoIds.length > 0 ? '📷' : '📋'}
-              </Text>
+              <Ionicons
+                name={exposure.photoIds.length > 0 ? 'camera' : 'document-text'}
+                size={32}
+                color={colors.icon.muted}
+                accessibilityLabel={exposure.photoIds.length > 0 ? 'Photo icon' : 'Document icon'}
+              />
             </View>
           )}
           {exposure.photoIds.length > 1 && (
@@ -140,13 +144,14 @@ export const ExposureCard = React.memo(function ExposureCard({ exposure, thumbna
           {/* Location */}
           {(exposure.location.siteName || exposure.location.address) && (
             <View style={styles.locationContainer}>
+              <Ionicons name="location" size={14} color={colors.icon.secondary} style={styles.locationIcon} />
               <Text
                 variant="bodySmall"
                 style={styles.location}
                 numberOfLines={1}
                 accessibilityLabel={`Location: ${exposure.location.siteName || exposure.location.address}`}
               >
-                📍 {exposure.location.siteName || exposure.location.address}
+                {exposure.location.siteName || exposure.location.address}
               </Text>
             </View>
           )}
@@ -259,6 +264,10 @@ const styles = StyleSheet.create({
   locationContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 4,
+  },
+  locationIcon: {
+    marginTop: 2,
   },
   location: {
     flex: 1,

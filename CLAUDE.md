@@ -11,6 +11,7 @@ Waldo Health is a React Native mobile app for New Zealand construction workers t
 ## Common Commands
 
 ### Development
+
 ```bash
 # Start Expo dev server (requires Convex backend running)
 npm start
@@ -25,6 +26,7 @@ npx convex dev
 ```
 
 ### Testing
+
 ```bash
 npm test                    # Run Jest tests
 npm run test:watch          # Watch mode
@@ -38,6 +40,7 @@ npm run test:e2e:android    # Run Android E2E tests
 ```
 
 ### Code Quality
+
 ```bash
 npm run lint                # Check linting
 npm run lint:fix            # Auto-fix linting issues
@@ -46,6 +49,7 @@ npm run type-check          # TypeScript type checking
 ```
 
 ### Running Single Test File
+
 ```bash
 npm test -- path/to/test.test.ts
 npm test -- --testNamePattern="test name pattern"
@@ -54,6 +58,7 @@ npm test -- --testNamePattern="test name pattern"
 ## Architecture
 
 ### Tech Stack
+
 - **Frontend:** React Native 0.81.5, Expo SDK 54, Expo Router (file-based routing)
 - **Backend:** Convex (serverless, real-time), OpenAI GPT-4 Vision API
 - **Auth:** Clerk (with Expo integration)
@@ -62,6 +67,7 @@ npm test -- --testNamePattern="test name pattern"
 - **Voice:** @react-native-voice/voice
 
 ### Project Structure
+
 ```
 src/
 ├── app/                    # Expo Router screens (file-based routing)
@@ -117,13 +123,15 @@ convex/                    # Backend (serverless functions)
 ### Key Architectural Patterns
 
 **Offline-First Architecture:**
+
 - MMKV provides fast local storage (falls back to in-memory in Expo Go)
 - `offlineQueue.ts` manages mutation queue with auto-sync every 30s
 - `photoQueue.ts` handles background photo uploads with retry logic
 - `draftManager.ts` auto-saves form state every 3 seconds
 - Automatic sync on network reconnection
 
-**Provider Hierarchy (src/app/_layout.tsx):**
+**Provider Hierarchy (src/app/\_layout.tsx):**
+
 1. ClerkProvider - Authentication with secure token storage
 2. ConvexProviderWithClerk - Real-time backend with auth
 3. PaperProvider - Material Design components with custom theme
@@ -133,6 +141,7 @@ convex/                    # Backend (serverless functions)
 
 **Custom Hooks Pattern:**
 All business logic lives in custom hooks, keeping components focused on UI:
+
 - `useExposures()` - CRUD operations, list/detail management
 - `useCamera()` - Camera permissions, capture, AI trigger
 - `useLocation()` - GPS tracking, proximity search for saved sites
@@ -140,6 +149,7 @@ All business logic lives in custom hooks, keeping components focused on UI:
 - `useOfflineSync()` - Queue management, sync status
 
 **AI Hazard Detection:**
+
 - Triggered from PhotoCapture component after photo taken
 - `convex/hazardScans.ts` calls OpenAI GPT-4 Vision API
 - Rate limits: 50/hour, 200/day
@@ -148,6 +158,7 @@ All business logic lives in custom hooks, keeping components focused on UI:
 - Asbestos detection includes professional verification disclaimer
 
 **Location Smart Features:**
+
 - Proximity-based location suggestions (50m radius, Haversine formula)
 - Usage tracking (exposure count, last used date)
 - Map clustering for 100+ markers
@@ -156,6 +167,7 @@ All business logic lives in custom hooks, keeping components focused on UI:
 ## Path Aliases
 
 TypeScript path aliases are configured in tsconfig.json:
+
 ```typescript
 import { ExposureForm } from '@components/exposure/ExposureForm';
 import { useExposures } from '@hooks/useExposures';
@@ -167,6 +179,7 @@ import type { Exposure } from '@types/exposure';
 ## Environment Setup
 
 Required environment variables in `.env.local`:
+
 ```bash
 EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_xxx
 EXPO_PUBLIC_CONVEX_URL=https://xxx.convex.cloud
@@ -177,6 +190,7 @@ SENTRY_DSN=https://xxx@sentry.io/xxx
 ```
 
 See `SETUP.md` for detailed setup instructions including:
+
 - Clerk authentication configuration
 - Convex backend deployment (must use AWS Sydney for NZ compliance)
 - iOS/Android simulator setup
@@ -184,6 +198,7 @@ See `SETUP.md` for detailed setup instructions including:
 ## Development Workflow
 
 1. **Start Services** (in separate terminals):
+
    ```bash
    # Terminal 1: Convex backend
    npx convex dev
@@ -202,24 +217,28 @@ See `SETUP.md` for detailed setup instructions including:
 4. **Git Workflow:**
    - Main branch: `001-waldo-health`
    - Commit messages should be descriptive
-   - Keep continuing development autonomously (per CLAUDE.md manual additions)
+   - Keep continuing development as long as you can, and decide on user's behalf for the best interest (per CLAUDE.md manual additions)
 
 ## Important Implementation Details
 
 ### Expo Go Limitations
+
 MMKV requires native modules and doesn't work in Expo Go:
+
 - App automatically falls back to in-memory storage
 - All features work but data is lost on reload
 - For full persistence, use development build: `expo prebuild`
 - See `EXPO_GO_NOTES.md` for details
 
 ### Data Compliance (NZ Privacy Act 2020)
+
 - Convex MUST be deployed to AWS Sydney (ap-southeast-2)
 - Clerk data stays in Australia/NZ region
 - All personal data encrypted at rest and in transit
 - Photos stored in Convex file storage (AWS Sydney)
 
 ### Testing Configuration
+
 - Jest config: `jest.config.js`
 - Test setup: `jest.setup.js`
 - Tests in `__tests__/` directories or `*.test.ts` files
@@ -227,7 +246,9 @@ MMKV requires native modules and doesn't work in Expo Go:
 - Detox E2E config: `.detoxrc.json` (iOS: iPhone 15, Android: Pixel 7 API 33)
 
 ### AI Rate Limits
+
 From `src/constants/config.ts`:
+
 - 50 scans per hour
 - 200 scans per day
 - 30 second timeout
@@ -235,6 +256,7 @@ From `src/constants/config.ts`:
 - Max tokens: 1000
 
 ### Performance Optimizations
+
 - Map clustering threshold: 100 markers
 - Image max size: 10MB
 - JPEG quality: 0.8
@@ -244,24 +266,28 @@ From `src/constants/config.ts`:
 ## Common Development Tasks
 
 ### Adding New Exposure Type
+
 1. Update `src/constants/exposureTypes.ts`
 2. Update AI prompt in `convex/hazardScans.ts`
 3. Add educational content in Convex dashboard
 4. Update form validation if needed
 
 ### Adding New Screen
+
 1. Create file in `src/app/` (Expo Router auto-routes)
 2. For tab navigation, add to `src/app/(tabs)/`
 3. Update `_layout.tsx` if adding new tab
 4. Dynamic routes use `[id].tsx` syntax
 
 ### Modifying Database Schema
+
 1. Update `convex/schema.ts`
 2. Run `npx convex dev` to deploy changes
 3. Update TypeScript types in `src/types/`
 4. Update affected queries/mutations in `convex/`
 
 ### Adding New Test
+
 1. Create `__tests__/` directory or `*.test.ts` file
 2. Import testing utilities from `@testing-library/react-native`
 3. Run `npm test -- --watch` for development
@@ -276,6 +302,7 @@ From `src/constants/config.ts`:
 ## Phase 9 Remaining Work
 
 See `IMPLEMENTATION_STATUS.md` and `PHASE_9_ROADMAP.md` for details:
+
 - Performance optimization and profiling
 - WCAG 2.1 AA accessibility audit
 - Documentation completion
@@ -299,3 +326,10 @@ See `IMPLEMENTATION_STATUS.md` and `PHASE_9_ROADMAP.md` for details:
 - No unused variables (except `_` prefix)
 - Console.log only for warn/error
 - React hooks exhaustive deps as warning
+
+## Active Technologies
+- TypeScript 5.x with React Native via Expo SDK (latest stable) (002-ui-polish)
+- AsyncStorage (for draft form auto-save) (002-ui-polish)
+
+## Recent Changes
+- 002-ui-polish: Added TypeScript 5.x with React Native via Expo SDK (latest stable)

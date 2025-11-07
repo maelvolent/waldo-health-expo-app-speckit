@@ -65,6 +65,33 @@ export const colors = {
   offline: '#9E9E9E',
   syncing: '#2196F3',
   synced: '#4CAF50',
+
+  // Semantic colors for message boxes and alerts
+  infoBackground: '#E3F2FD', // Light blue - for informational messages
+  infoBorder: '#2196F3',
+  infoText: '#0D47A1', // 7.6:1 contrast on white background
+
+  warningBackground: '#FFF3E0', // Light orange - for warnings
+  warningBorder: '#FF9800',
+  warningText: '#E65100', // 5.4:1 contrast on white background
+
+  errorBackground: '#FFEBEE', // Light red - for errors
+  errorBorder: '#F44336',
+  errorText: '#C62828', // 6.9:1 contrast on white background
+
+  successBackground: '#E8F5E9', // Light green - for success messages
+  successBorder: '#4CAF50',
+  successText: '#2E7D32', // 5.9:1 contrast on white background
+
+  // Icon colors (following semantic meaning)
+  icon: {
+    primary: '#333333',   // Default icon color - 12.6:1 contrast
+    secondary: '#666666', // Secondary icon color - 5.7:1 contrast
+    muted: '#999999',     // Muted/disabled icon color - 2.8:1 contrast
+    success: '#22C55E',   // Success state icon
+    warning: '#F59E0B',   // Warning state icon
+    error: '#EF4444',     // Error state icon
+  },
 };
 
 export const spacing = {

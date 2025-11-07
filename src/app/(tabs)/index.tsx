@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-nati
 import { Link, useRouter } from 'expo-router';
 import { useAuth, useUser } from '@clerk/clerk-expo';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
 import { colors, spacing } from '@constants/theme';
 import { useQuery } from 'convex/react';
 import { api } from '../../../convex/_generated/api';
@@ -19,7 +20,13 @@ export default function Index() {
       <SafeAreaView style={styles.container}>
         <View style={styles.authContainer}>
           <View style={styles.header}>
-            <Text style={styles.logoText}>🛡️</Text>
+            <Ionicons
+              name="shield-checkmark"
+              size={80}
+              color={colors.primary}
+              style={styles.logoIcon}
+              accessibilityLabel="Waldo Health logo"
+            />
             <Text style={styles.title}>Waldo Health</Text>
             <Text style={styles.subtitle}>Workplace Exposure Documentation</Text>
           </View>
@@ -56,36 +63,73 @@ export default function Index() {
           <TouchableOpacity
             style={[styles.actionCard, styles.primaryCard]}
             onPress={() => router.push('/new')}
+            accessibilityLabel="Document new exposure"
+            accessibilityHint="Navigate to exposure documentation form"
           >
             <View style={styles.cardIcon}>
-              <Text style={styles.cardEmoji}>📸</Text>
+              <Ionicons
+                name="camera"
+                size={48}
+                color={colors.primary}
+                accessibilityLabel="Camera icon"
+              />
             </View>
             <Text style={styles.cardTitle}>Document Exposure</Text>
             <Text style={styles.cardDescription}>Quick 60-second capture</Text>
           </TouchableOpacity>
 
           {/* View History Card */}
-          <TouchableOpacity style={styles.actionCard} onPress={() => router.push('/list')}>
+          <TouchableOpacity
+            style={styles.actionCard}
+            onPress={() => router.push('/list')}
+            accessibilityLabel="View exposure history"
+            accessibilityHint={`View ${recentCount} recent exposures`}
+          >
             <View style={styles.cardIcon}>
-              <Text style={styles.cardEmoji}>📋</Text>
+              <Ionicons
+                name="list"
+                size={48}
+                color={colors.icon.primary}
+                accessibilityLabel="List icon"
+              />
             </View>
             <Text style={styles.cardTitle}>View History</Text>
             <Text style={styles.cardDescription}>{recentCount} recent exposures</Text>
           </TouchableOpacity>
 
           {/* Export Card */}
-          <TouchableOpacity style={styles.actionCard} onPress={() => router.push('/export')}>
+          <TouchableOpacity
+            style={styles.actionCard}
+            onPress={() => router.push('/export')}
+            accessibilityLabel="Export reports"
+            accessibilityHint="Export data in PDF and CSV formats"
+          >
             <View style={styles.cardIcon}>
-              <Text style={styles.cardEmoji}>📄</Text>
+              <Ionicons
+                name="download"
+                size={48}
+                color={colors.icon.primary}
+                accessibilityLabel="Download icon"
+              />
             </View>
             <Text style={styles.cardTitle}>Export Reports</Text>
             <Text style={styles.cardDescription}>PDF & CSV formats</Text>
           </TouchableOpacity>
 
           {/* Settings/Profile Card */}
-          <TouchableOpacity style={styles.actionCard} onPress={() => signOut()}>
+          <TouchableOpacity
+            style={styles.actionCard}
+            onPress={() => signOut()}
+            accessibilityLabel="Sign out"
+            accessibilityHint="Sign out of your account"
+          >
             <View style={styles.cardIcon}>
-              <Text style={styles.cardEmoji}>⚙️</Text>
+              <Ionicons
+                name="log-out"
+                size={48}
+                color={colors.icon.primary}
+                accessibilityLabel="Sign out icon"
+              />
             </View>
             <Text style={styles.cardTitle}>Sign Out</Text>
             <Text style={styles.cardDescription}>Secure your account</Text>
@@ -94,7 +138,16 @@ export default function Index() {
 
         {/* Info Section */}
         <View style={styles.infoSection}>
-          <Text style={styles.infoTitle}>ℹ️ About Waldo Health</Text>
+          <View style={styles.infoTitleContainer}>
+            <Ionicons
+              name="information-circle"
+              size={20}
+              color={colors.primary}
+              style={styles.infoIcon}
+              accessibilityLabel="Information icon"
+            />
+            <Text style={styles.infoTitle}>About Waldo Health</Text>
+          </View>
           <Text style={styles.infoText}>
             Professional workplace exposure documentation designed for New Zealand construction
             workers. Complies with ACC, Health & Safety, and Privacy Act requirements.
@@ -125,8 +178,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: spacing.xl,
   },
-  logoText: {
-    fontSize: 80,
+  logoIcon: {
     marginBottom: spacing.md,
   },
   title: {
@@ -210,9 +262,6 @@ const styles = StyleSheet.create({
   cardIcon: {
     marginBottom: spacing.md,
   },
-  cardEmoji: {
-    fontSize: 48,
-  },
   cardTitle: {
     fontSize: 16,
     fontWeight: '600',
@@ -234,11 +283,18 @@ const styles = StyleSheet.create({
     borderLeftWidth: 4,
     borderLeftColor: colors.primary,
   },
+  infoTitleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: spacing.sm,
+  },
+  infoIcon: {
+    marginRight: spacing.xs,
+  },
   infoTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: colors.text,
-    marginBottom: spacing.sm,
   },
   infoText: {
     fontSize: 14,
