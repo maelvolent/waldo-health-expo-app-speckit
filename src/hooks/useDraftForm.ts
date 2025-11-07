@@ -1,6 +1,6 @@
 /**
  * useDraftForm Hook
- * Provides auto-save functionality for form drafts using AsyncStorage
+ * Provides auto-save functionality for form drafts using MMKV storage
  *
  * Usage:
  *   const { loadDraft, clearDraft, lastSaved } = useDraftForm('exposure_new', formData, 2000);
@@ -10,11 +10,11 @@
  * - Loads draft on component mount
  * - Clears draft on form submission
  * - Tracks last saved timestamp
- * - Handles AsyncStorage errors gracefully
+ * - Uses MMKV storage (with in-memory fallback for Expo Go)
  */
 
 import { useEffect, useState } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { storageHelpers } from '@lib/storage';
 import { useDebounce } from './useDebounce';
 
 export function useDraftForm<T>(
@@ -32,16 +32,15 @@ export function useDraftForm<T>(
   const storageKey = `draft_${draftId}`;
 
   /**
-   * Load draft from AsyncStorage
+   * Load draft from storage
    * Call this on component mount to restore previous session
    */
   const loadDraft = async (): Promise<T | null> => {
     try {
       setIsLoading(true);
-      const draftJson = await AsyncStorage.getItem(storageKey);
-      if (draftJson) {
-        const parsed = JSON.parse(draftJson);
-        return parsed.data;
+      const draft = storageHelpers.get<{ data: T; timestamp: number; version: number }>(storageKey);
+      if (draft) {
+        return draft.data;
       }
       return null;
     } catch (error) {
@@ -53,12 +52,12 @@ export function useDraftForm<T>(
   };
 
   /**
-   * Clear draft from AsyncStorage
+   * Clear draft from storage
    * Call this after successful form submission
    */
   const clearDraft = async (): Promise<void> => {
     try {
-      await AsyncStorage.removeItem(storageKey);
+      storageHelpers.remove(storageKey);
       setLastSaved(null);
     } catch (error) {
       console.error('Failed to clear draft:', error);
@@ -75,7 +74,7 @@ export function useDraftForm<T>(
         timestamp: Date.now(),
         version: 1,
       };
-      await AsyncStorage.setItem(storageKey, JSON.stringify(draftObj));
+      storageHelpers.set(storageKey, draftObj);
       setLastSaved(Date.now());
     } catch (error) {
       console.error('Failed to save draft:', error);
@@ -89,22 +88,18 @@ export function useDraftForm<T>(
       return;
     }
 
-    // Save draft to AsyncStorage
-    const autoSave = async () => {
-      try {
-        const draftObj = {
-          data: debouncedFormData,
-          timestamp: Date.now(),
-          version: 1,
-        };
-        await AsyncStorage.setItem(storageKey, JSON.stringify(draftObj));
-        setLastSaved(Date.now());
-      } catch (error) {
-        console.error('Failed to auto-save draft:', error);
-      }
-    };
-
-    autoSave();
+    // Save draft to storage
+    try {
+      const draftObj = {
+        data: debouncedFormData,
+        timestamp: Date.now(),
+        version: 1,
+      };
+      storageHelpers.set(storageKey, draftObj);
+      setLastSaved(Date.now());
+    } catch (error) {
+      console.error('Failed to auto-save draft:', error);
+    }
   }, [debouncedFormData, storageKey]);
 
   return {
