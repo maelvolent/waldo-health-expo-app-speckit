@@ -1744,7 +1744,7 @@ Post-MVP can add:
 - [x] T005 [P1] Create useBlurSupport capability detection hook → `src/hooks/useBlurSupport.ts` [NEW]
 - [x] T006 [P1] Create useGlassTheme preset management hook → `src/hooks/useGlassTheme.ts` [NEW]
 - [x] T007 [P1] Create accessibility contrast validation utility → `src/utils/accessibility.ts` [NEW]
-- [ ] T008 [P1] Add GlassCard component → `src/components/common/GlassCard.tsx` [NEW]
+- [x] T008 [P1] Add GlassCard component → `src/components/common/GlassCard.tsx` [NEW]
 - [ ] T009 [P1] Add GlassButton component → `src/components/common/GlassButton.tsx` [NEW]
 - [ ] T010 [P1] Add GlassModal component → `src/components/common/GlassModal.tsx` [NEW]
 - [ ] T011 [P1] Add GlassNavBar component → `src/components/common/GlassNavBar.tsx` [NEW]
